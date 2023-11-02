@@ -20,7 +20,7 @@
                 <div class="card-body">
 
                     <h5 class="card-title">
-                        <span>Photo :</span>
+                        <span> Student Photo :</span>
                         <span>
                             @if (!empty($student->image))
                             <img src="{{asset($student->image)}}" alt="studentImg" width="85" class="rounded-circle img-thumbnail">
@@ -54,31 +54,22 @@
                         <span> {{ $student->course }}</span>
                     </h5>
                     <hr />
-                    {{-- <h5 class="card-title">
-                        <span>Valid From Date: </span>
-                        <span>{{ $student->valid_from_date }}</span>
-                    </h5>
-                    <hr /> --}}
-                    {{-- <h5 class="card-title">
-                        <span>Valid Upto Date : </span>
-                        <span>{{ $student->valid_upto_date }}</span>
-                    </h5>
-                    <hr /> --}}
-                    {{-- <h5 class="card-title">
-                        <span>Plan : </span>
-                        <span>{{ $student->plan }}</span>
-                    </h5>
-                    <hr> --}}
-
-                    {{-- <h5 class="card-title">
-                        <span>Mode of Payment : </span>
-                        <span>{{ $student->mode_of_payment }}</span>
-                    </h5>
-                    <hr> --}}
 
                     <h5 class="card-title">
                         <span>Subscription : </span>
                         <span>{{ $student->subscription }}</span>
+                    </h5>
+                    <hr>
+
+                    <h5 class="card-title">
+                        <span>Payment : </span>
+                        <span>{{ $student->payment }}</span>
+                    </h5>
+                    <hr>
+
+                    <h5 class="card-title">
+                        <span>Pending Payment : </span>
+                        <span>{{ $student->pending_payment }}</span>
                     </h5>
                     <hr>
 

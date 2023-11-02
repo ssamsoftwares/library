@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('current_address')->nullable();
             $table->string('permanent_address')->nullable();
             $table->string('subscription')->nullable();
+            $table->string('payment')->nullable();
+            $table->string('pending_payment')->nullable();
             $table->string('remark_singnature')->nullable();
             $table->string('hall_number')->nullable();
             $table->string('vehicle_number')->nullable();
@@ -29,6 +31,7 @@ return new class extends Migration
             $table->string('aadhar_front_img')->nullable();
             $table->string('aadhar_back_img')->nullable();
             $table->string('image')->nullable();
+            $table->enum('status',['active','block'])->default('active');
             $table->timestamps();
         });
     }

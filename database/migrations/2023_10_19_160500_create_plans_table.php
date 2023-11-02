@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('student_id');
             $table->string('plan');
             $table->string('mode_of_payment');
-            $table->string('valid_from_date');
-            $table->string('valid_upto_date');
+            $table->date('valid_from_date');
+            $table->date('valid_upto_date');
             $table->timestamps();
             $table->foreign('student_id')->references('id')->on('students')
             ->onDelete('cascade');

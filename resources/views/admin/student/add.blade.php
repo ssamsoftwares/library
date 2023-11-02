@@ -56,6 +56,17 @@
 
                     <div class="row">
                         <div class="col-lg-6">
+                                <x-form.input name="payment" label="Payment" type="text" />
+                            </div>
+
+                        <div class="col-lg-6">
+                                <x-form.input name="pending_payment" label="Pending Payment" type="text" />
+                            </div>
+                     </div>
+
+
+                    <div class="row">
+                        <div class="col-lg-6">
                             <x-form.input name="subscription" label="Subscription"/>
                         </div>
 
@@ -102,11 +113,11 @@
 
                     <div class="row">
                         <div class="col-lg-6">
-                            <x-form.input name="Aadhar Back Image" label="Aadhar Back Image" type="file"/>
+                            <x-form.input name="aadhar_back_img" label="Aadhar Back Image" type="file"/>
                         </div>
 
                         <div class="col-lg-6">
-                            <x-form.input name="image" label="image" type="file"/>
+                            <x-form.input name="image" label="Student image" type="file"/>
                         </div>
                     </div>
 

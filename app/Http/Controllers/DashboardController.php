@@ -18,8 +18,9 @@ class DashboardController extends Controller
         $total['student'] = Student::count();
         // $total['plans'] = Plan::count();
         // Count total active plans
-        $total['totalActivePlans'] = Plan::whereDate('valid_upto_date', '>=', now())
-            ->whereDate('valid_upto_date', '<=', now()->addDays(5))
+        $currentDate = date('Y-m-d');
+        $total['totalActivePlans'] = Plan::whereDate('valid_upto_date', '>=', $currentDate)
+            // ->whereDate('valid_upto_date', '<=', now()->addDays(5))
             ->count();
 
         $plans = Plan::with('student')
@@ -41,7 +42,7 @@ class DashboardController extends Controller
             });
         }
 
-        $plans = $plans->paginate(10);
+        $plans = $plans->orderBy('created_at', 'DESC')->paginate(10);
         return view('dashboard')->with(compact('total', 'plans'));
     }
 }

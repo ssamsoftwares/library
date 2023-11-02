@@ -10,6 +10,18 @@ use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:student-list|student-view|student-create|student-edit|student-delete', ['only' => ['index', 'view']]);
+        $this->middleware('permission:student-view', ['only' => ['view']]);
+        $this->middleware('permission:student-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:student-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:student-delete', ['only' => ['destroy']]);
+    }
+
+
+
     // Show list Student
     public function index(Request $request)
     {
@@ -23,7 +35,7 @@ class StudentController extends Controller
                     ->orWhere('dob', 'like', $search . '%');
             });
         }
-        $students = $students->paginate(10);
+        $students = $students->orderBy('created_at', 'desc')->paginate(10);
 
         return view('admin.student.all')->with(compact('students'));
     }
@@ -45,6 +57,8 @@ class StudentController extends Controller
             'personal_number' => 'required|unique:students',
             'aadhar_number' => 'required|unique:students',
         ]);
+
+        // dd($request->all());
 
         DB::beginTransaction();
         try {
@@ -190,4 +204,15 @@ class StudentController extends Controller
         DB::commit();
         return redirect()->back()->with('status', 'Student deleted successfully!');
     }
+
+    // Student status change
+    public function studentStatusUpdate($id)
+    {
+        $studentBlock = Student::find($id);
+        $studentBlock->status = $studentBlock->status=='active'?'block':'active';
+        $studentBlock->update();
+        return redirect()->back()->with('status',  $studentBlock->name . ' Student status has been updated.');
+    }
+
+
 }

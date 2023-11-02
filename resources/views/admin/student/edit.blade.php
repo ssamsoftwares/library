@@ -55,21 +55,16 @@
                         </div>
                     </div>
 
-                    
+
                     <div class="row">
                         <div class="col-lg-6">
-                            <x-form.select name="plan" label="Plan" chooseFileComment="--Select Plan--" :options="[
-                                'plan1' => 'Plan1',
-                                  'plan2' => 'Plan2',
-                                  'plan3' => 'Plan3',
-                              ]" :selected="$student->plan"   />
-
-                        </div>
+                                <x-form.input name="payment" label="Payment" type="text" :value="$student->payment"  />
+                            </div>
 
                         <div class="col-lg-6">
-                            <x-form.input name="mode_of_payment" label="Mode of Payment" type="text" :value="$student->mode_of_payment"  />
-                        </div>
-                    </div>
+                                <x-form.input name="pending_payment" label="Pending Payment" type="text" :value="$student->pending_payment"  />
+                            </div>
+                     </div>
 
 
                     <div class="row">
@@ -105,7 +100,6 @@
                             <x-form.textarea name="permanent_address" label="Permanent Address" :value="$student->permanent_address" />
                         </div>
                     </div>
-
 
                     <div class="row">
                         <div class="col-lg-12">
@@ -144,7 +138,7 @@
 
                     <div class="row">
                         <div class="col-lg-8">
-                            <x-form.input name="image" label="image" type="file"/>
+                            <x-form.input name="image" label="Student image" type="file"/>
                         </div>
                             <div class="col-lg-4 mt-lg-4">
                                 @if (! @empty($student->image))
@@ -155,8 +149,16 @@
                             </div>
                     </div>
 
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <x-form.radio label="Status" name="status" id="" :value="$student->status" />
+                        </div>
+                    </div>
+
+
                     <div>
-                        <button class="btn btn-primary" type="submit">{{__('Update Student')}}</button>
+                        <button class="btn btn-primary mt-2" type="submit">{{__('Update Student')}}</button>
                     </div>
                 </form>
            </div>

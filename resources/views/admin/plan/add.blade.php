@@ -11,10 +11,6 @@
 @section('content')
     <x-status-message />
 
-    {{-- {{
-        print_r(session()->all());
-    }} --}}
-
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
@@ -28,11 +24,14 @@
                             <div class="col-lg-8">
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" name="student_search"
-                                        placeholder="Search Student ...... Aadhar Number"
-                                        value="{{ isset($_REQUEST['student_search']) ? $_REQUEST['student_search'] : '' }}">
+                                        placeholder="Search Student ...... Email, Phone & Aadhar Number"
+                                        value="{{ isset($_REQUEST['student_search']) ? $_REQUEST['student_search'] : (old('student_search') ? old('student_search') : '') }}">
                                     <div class="input-group-append">
                                         <button class="btn btn-success" type="submit">Search</button>
                                     </div>
+                                    @error('student_search')
+                                        <div class="text-danger form-text">{{ $message }}</div>
+                                    @enderror
                                 </div>
 
                             </div>
@@ -78,19 +77,18 @@
 
                             <div class="col-lg-6">
                                 <x-form.input name="valid_upto_date" label="Valid Upto Date" type="date"
-                                    value="<?php echo date('Y-m-d'); ?>" />
+                                    min="<?php echo date('Y-m-d'); ?>" />
                             </div>
                         </div>
 
                         <div>
-                            <a href="javascript:void(0)" id="downloadPdf" class="btn btn-info">Download PDF</a>
-                            @if (session()->get('pdfDownload') == 'downloaded')
-                                <button class="btn btn-primary" type="submit"
-                                    @if ($fieldDisable == 'true') disabled @endif>{{ __('Asign Plan') }}</button>
-                            @endif
+                            <button type="button" id="downloadPdf" class="btn btn-info"
+                                {{ session()->has('pdfDownloadBtn') ? session()->get('pdfDownloadBtn') : $pdfDownloadBtn }}>Download
+                                PDF</button>
 
+                            <button class="btn btn-primary" id="assignBtn" type="submit"
+                                {{ session()->has('assignButton') ? session()->get('assignButton') : $assignButton }}>{{ __('Asign Plan') }}</button>
                         </div>
-
 
                     </form>
                 </div>
@@ -102,21 +100,32 @@
 @push('script')
     <script>
         $(document).ready(function() {
+            let assignBtn = $('#assignBtn')
+
             $('#downloadPdf').on('click', function() {
+                let btn = $(this)
+                let studentId = $('input[name="student_id"]').val();
 
-                window.location.href = "{{ route('plan.downloadPdf') }}";
+                if (!studentId) {
+                    alert("Please search for a student first.");
+                    return;
+                }
 
-                setTimeout(() => {
-                    location.reload()
-                }, 1000);
-                // $.ajax({
-                //     type: "get",
-                //     url: "{{ route('plan.downloadPdf') }}",
-                //     success: function(response) {
-                //         console.log(response);
-                //     }
-                // });
+                btn.attr("disabled", true);
+                btn.html("Please wait...");
+                $.ajax({
+                    type: "get",
+                    url: '/download-pdf/' + studentId,
+
+                    success: function(response) {
+                        // assignBtn.attr('disabled', false)
+                        window.open('/download-pdf/' + studentId);
+                        // btn.attr("disabled",false);
+                        btn.html("Download PDF");
+                    }
+                });
             })
+
         });
     </script>
 @endpush

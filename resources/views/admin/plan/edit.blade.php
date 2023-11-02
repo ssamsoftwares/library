@@ -18,7 +18,7 @@
                     <form method="post" action="{{ route('plan.update', ['plan' => $plan->id]) }}">
                         @csrf
 
-                        {{-- Student Personal Details --}}
+                        {{-- Plan Details --}}
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -90,7 +90,7 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- Student Personal Details End --}}
+                        {{-- Plan Details End --}}
 
                         <h4 class="card-title mb-3">{{ __('Edit the Plan Details') }}</h4>
                         <div class="row">
