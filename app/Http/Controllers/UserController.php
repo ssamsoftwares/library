@@ -57,23 +57,28 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
-            'roles' => 'required'
         ]);
-        DB::beginTransaction();
-        try {
 
+        DB::beginTransaction();
+
+        try {
             $input = $request->all();
             $input['password'] = Hash::make($input['password']);
 
             $user = User::create($input);
-            $user->assignRole($request->input('roles'));
+            // Assign the "manager" role
+            $user->assignRole('manager');
         } catch (Exception $e) {
             DB::rollback();
             return redirect()->back()->with('status', $e->getMessage());
         }
+
         DB::commit();
+
         return redirect()->back()->with('status', 'User created successfully');
     }
+
+
 
     /**
      * Display the specified resource.
@@ -106,12 +111,14 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $id,
             'password' => 'same:confirm-password',
-            'roles' => 'required'
+            // 'roles' => 'required'
         ]);
 
         DB::beginTransaction();
+
         try {
             $input = $request->all();
+
             if (!empty($input['password'])) {
                 $input['password'] = Hash::make($input['password']);
             } else {
@@ -120,15 +127,19 @@ class UserController extends Controller
 
             $user = User::find($id);
             $user->update($input);
-            DB::table('model_has_roles')->where('model_id', $id)->delete();
-            $user->assignRole($request->input('roles'));
+
+            // Assign the "manager" role
+            $user->assignRole('manager');
         } catch (Exception $e) {
             DB::rollback();
             return redirect()->back()->with('status', $e->getMessage());
         }
+
         DB::commit();
+
         return redirect()->back()->with('status', 'User updated successfully');
     }
+
 
     /**
      * Remove the specified resource from storage.

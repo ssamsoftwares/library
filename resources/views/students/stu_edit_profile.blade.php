@@ -156,7 +156,6 @@
                         </div>
                     </div> --}}
 
-
                     <div>
                         <button class="btn btn-primary mt-2" type="submit">{{__('Update Student')}}</button>
                     </div>

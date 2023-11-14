@@ -37,7 +37,7 @@ class AdminSeeder extends Seeder
         $admin->assignRole([$role->id]);
 
         $m_role = Role::where('name','manager')->first();
-        $m_role->syncPermissions(['student-list','student-view','student-create','plan-list','plan-create']);
+        $m_role->syncPermissions(['student-list','student-view','student-create','plan-list','plan-view','plan-create']);
         $manager->assignRole([$m_role->id]);
     }
 }

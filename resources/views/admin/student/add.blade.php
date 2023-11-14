@@ -99,27 +99,50 @@
                         </div>
                     </div>
 
-
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <x-form.input name="aadhar_number" label="Aadhar Number" type="text"/>
                         </div>
-
-                        <div class="col-lg-6">
-                            <x-form.input name="aadhar_front_img" label="Aadhar Front Image" type="file"/>
-                        </div>
                     </div>
-
 
                     <div class="row">
-                        <div class="col-lg-6">
-                            <x-form.input name="aadhar_back_img" label="Aadhar Back Image" type="file"/>
+                        <div class="col-lg-7">
+                            <label for="">Aadhar Front side Image Upload</label>
+                            <input type="file" accept="image/*" name="aadhar_front_img" id="aadhar_front_img"
+                                onchange="loadFile(event, 'output1')" class="form-control">
                         </div>
-
-                        <div class="col-lg-6">
-                            <x-form.input name="image" label="Student image" type="file"/>
+                        <div class="col-lg-5">
+                            <img id="output1" src="" alt="aadhar Img front Preview"
+                                style="max-width: 50%; max-height: 100px;">
                         </div>
                     </div>
+
+                    <div class="row mt-4">
+                        <div class="col-lg-7">
+                            <label for="">Aadhar back side Image Upload</label>
+                            <input type="file" accept="image/*" name="aadhar_back_img" id="aadhar_back_img"
+                                onchange="loadFile(event, 'output2')" class="form-control">
+                        </div>
+
+                        <div class="col-lg-5">
+                            <img id="output2" src="" alt="aadhar Img back Preview"
+                                style="max-width: 50%; max-height: 100px;">
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-lg-7">
+                            <label for="">Student Image</label>
+                            <input type="file" accept="image/*" name="image" id="student_image"
+                                onchange="loadFile(event, 'output3')" class="form-control">
+                        </div>
+
+                        <div class="col-lg-5">
+                            <img id="output3" src="" alt=" student Image Preview"
+                                style="max-width: 50%; max-height: 100px;">
+                        </div>
+                    </div>
+
 
                     <div>
                         <button class="btn btn-primary" type="submit">{{__('Add Student')}}</button>
@@ -131,3 +154,13 @@
 </div>
 
 @endsection
+ {{-- Image Preview Script --}}
+ <script>
+    function loadFile(event, outputId) {
+        var output = document.getElementById(outputId);
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function() {
+            URL.revokeObjectURL(output.src); // Free up memory
+        };
+    }
+</script>
