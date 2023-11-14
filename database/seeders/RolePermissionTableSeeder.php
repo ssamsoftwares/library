@@ -21,6 +21,9 @@ class RolePermissionTableSeeder extends Seeder
             [
                 "name" => "manager"
             ],
+            // [
+            //     "name" => "student"
+            // ],
         ];
 
         $permissions = [

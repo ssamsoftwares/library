@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
@@ -25,7 +26,13 @@ class StudentController extends Controller
     // Show list Student
     public function index(Request $request)
     {
+        $authuser = Auth::user();
         $students = Student::query();
+
+        // if(!$authuser->hasRole('admin')){
+        //     $students->where('user_id',$authuser->id);
+        // }
+
         if ($request->has('search')) {
             $search = $request->input('search');
             $students->where(function ($subquery) use ($search) {

@@ -19,10 +19,25 @@ class UserController extends Controller
      */
     public function index(Request $request): View
     {
-        $data = User::orderBy('id', 'DESC')->paginate(5);
+        $data = User::orderBy('id', 'DESC');
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $data->where(function ($subquery) use ($search) {
+                $subquery->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', $search . '%')
+                    ->orWhereHas('roles', function ($roleQuery) use ($search) {
+                        $roleQuery->where('name', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        $data = $data->paginate(10);
+
         return view('admin.settings.user.all', compact('data'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+            ->with('i', ($request->input('page', 1) - 1) * 10);
     }
+
 
     /**
      * Show the form for creating a new resource.

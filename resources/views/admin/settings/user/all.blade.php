@@ -17,10 +17,10 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                {{-- <div class="justify-content-end d-flex">
+                <div class="justify-content-end d-flex">
                     <x-search.table-search action="{{ route('users.index') }}" method="get" name="search"
                         value="{{ isset($_REQUEST['search']) ? $_REQUEST['search'] : '' }}" btnClass="search_btn" />
-                    </div> --}}
+                    </div>
 
                 <div class="card-body text-center">
                     <div class="table-responsive">
@@ -38,6 +38,7 @@
 
                             <tbody id="candidatesData">
                                 @foreach ($data as $key => $user)
+                                @if (!$user->hasRole('admin'))
                                     <tr>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
@@ -72,6 +73,7 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    @endif
                                 @endforeach
                             </tbody>
                         </table>
