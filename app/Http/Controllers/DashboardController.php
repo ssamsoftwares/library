@@ -27,22 +27,26 @@ class DashboardController extends Controller
             ->whereDate('plans.valid_upto_date', '>=', Carbon::now())
             ->whereDate('plans.valid_upto_date', '<=', Carbon::now()->addDays(5));
 
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $plans->where(function ($query) use ($search) {
-                $query->where('plan', 'like', '%' . $search . '%')
-                    ->orWhere('mode_of_payment', 'like', '%' . $search . '%')
-                    ->orWhere('valid_from_date', 'like', '%' . $search . '%')
-                    ->orWhere('valid_upto_date', 'like', '%' . $search . '%')
-                    ->orWhereHas('student', function ($studentSubquery) use ($search) {
-                        $studentSubquery->where('name', 'like', '%' . $search . '%')
-                            ->orWhere('email', 'like', '%' . $search . '%')
-                            ->orWhere('aadhar_number', 'like', '%' . $search . '%');
-                    });
-            });
-        }
 
+            if ($request->filled('search')) {
+                $search = $request->input('search');
+                $formattedSearchDate = Carbon::createFromFormat('d-m-Y', $search)->format('Y-m-d');
+
+                $plans->where(function ($query) use ($formattedSearchDate, $search) {
+                    $query->where('plan', 'like', '%' . $search . '%')
+                        ->orWhere('mode_of_payment', 'like', '%' . $search . '%')
+                        ->orWhere('valid_from_date', $formattedSearchDate)
+                        ->orWhere('valid_upto_date', $formattedSearchDate)
+                        ->orWhereHas('student', function ($studentSubquery) use ($search) {
+                            $studentSubquery->where('name', 'like', '%' . $search . '%')
+                                ->orWhere('email', 'like', '%' . $search . '%')
+                                ->orWhere('aadhar_number', 'like', '%' . $search . '%');
+                        });
+                });
+            }
         $plans = $plans->orderBy('created_at', 'DESC')->paginate(10);
         return view('dashboard')->with(compact('total', 'plans'));
     }
+
+
 }

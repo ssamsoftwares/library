@@ -56,7 +56,7 @@
                     </div>
 
 
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-lg-6">
                                 <x-form.input name="payment" label="Payment" type="text" :value="$student->payment"  />
                             </div>
@@ -64,15 +64,15 @@
                         <div class="col-lg-6">
                                 <x-form.input name="pending_payment" label="Pending Payment" type="text" :value="$student->pending_payment"  />
                             </div>
-                     </div>
+                     </div> --}}
 
 
                     <div class="row">
-                        <div class="col-lg-6">
+                        {{-- <div class="col-lg-6">
                             <x-form.input name="subscription" label="Subscription" :value="$student->subscription" />
-                        </div>
+                        </div> --}}
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <x-form.input name="remark_singnature" label="Remark Singnature" :value="$student->remark_singnature" />
                         </div>
                     </div>

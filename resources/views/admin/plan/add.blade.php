@@ -58,8 +58,8 @@
                                 <x-form.select name="plan" label="Plan" chooseFileComment="--Select Plan--"
                                     :options="[
                                         'plan1' => 'Plan1',
-                                        'plan2' => 'Plan2',
-                                        'plan3' => 'Plan3',
+                                        // 'plan2' => 'Plan2',
+                                        // 'plan3' => 'Plan3',
                                     ]" />
 
                             </div>

@@ -118,6 +118,8 @@ Route::middleware(['student'])->group(function () {
     Route::get('student-profile-edit', [StudentAuthController::class, 'studentProfileEdit'])->name('student.studentProfileEdit');
 
     Route::post('student-profile-update', [StudentAuthController::class, 'studentProfileUpdate'])->name('student.studentProfileUpdate');
+
+    Route::get('plan-details', [StudentAuthController::class, 'planDetails'])->name('student.planDetails');
 });
 
 

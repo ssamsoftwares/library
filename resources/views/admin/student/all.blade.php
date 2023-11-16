@@ -29,6 +29,8 @@
                                 <th>{{ 'Student Photo' }}</th>
                                 <th>{{ 'Name' }}</th>
                                 <th>{{ 'Email' }}</th>
+                                @hasrole('admin')   <th>{{ 'Password' }}</th> @endhasrole
+
                                 <th>{{ 'Phone' }}</th>
                                 <th>{{ 'Status' }}</th>
                                 <th>{{ 'Actions' }}</th>
@@ -48,6 +50,7 @@
                                     </td>
                                     <td>{{ $stu->name }}</td>
                                     <td>{{ $stu->email }}</td>
+                                    @hasrole('admin')  <td>{{ $stu->password }}</td>@endhasrole
                                     <td>{{ $stu->personal_number }}</td>
 {{--
                                     @role('admin')

@@ -10,6 +10,12 @@
 
 @section('content')
 
+<div class="row">
+
+    <x-design.card heading="Total Student"  value="{{$total['activePlansCount']}}" icon="mdi-account-convert" desc="Activate student plans" />
+    <x-design.card heading="Total Plan" value="{{$total['expiredPlansCount']}}"  desc="Expired student plans"/>
+</div>
+
 <h4 class="card-title mt-4 mb-4">{{__('Your Plan Expired within 5 days')}}</h4>
 <div class="row">
     <div class="col-12">
@@ -49,7 +55,6 @@
 
                                 </div>
                             </td> --}}
-
                             <td>{{ $p->mode_of_payment }}</td>
                         </tr>
                         @endforeach

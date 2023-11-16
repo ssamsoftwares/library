@@ -63,13 +63,13 @@
                                                     class="btn btn-info waves-effect waves-light edit">
                                                     <i class="ri-pencil-line"></i>
                                                 </a>
-                                                <form method="POST" action="{{ route('users.destroy', $user->id) }}" style="display:inline">
+                                                {{-- <form method="POST" action="{{ route('users.destroy', $user->id) }}" style="display:inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger waves-effect waves-light del" onclick="return confirm('Are you sure you want to delete this record?')">
                                                         <i class="ri-delete-bin-line"></i>
                                                     </button>
-                                                </form>
+                                                </form> --}}
                                             </div>
                                         </td>
                                     </tr>

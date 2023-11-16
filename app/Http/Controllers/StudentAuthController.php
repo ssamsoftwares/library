@@ -26,22 +26,23 @@ class StudentAuthController extends Controller
     {
         $this->validate($request, [
             'login' => 'required',
+            'password' => 'required',
         ]);
 
         $login = $request->input('login');
+        $password = $request->input('password');
+
         $student = Student::where(function ($query) use ($login) {
             $query->where('email', $login)->orWhere('aadhar_number', $login);
         })->first();
 
-        if ($student) {
+        if ($student && $password == $student->password) {
             $request->session()->put('student_name', $student->email);
-            return redirect()->route('student.dashboard')->with('status', 'Student has successfully logged in...');
+            return redirect()->route('student.profile')->with('status', 'Student has successfully logged in...');
         } else {
-            return redirect()->route('student.login')->with('error', 'Oops! Student not found with this email or aadhar number');
+            return redirect()->route('student.login')->with('status', 'Oops! Invalid login credentials');
         }
     }
-
-
 
 
     // Student Logout
@@ -54,22 +55,43 @@ class StudentAuthController extends Controller
 
 
     // Student Dashboard
+
     public function studentdashboard(Request $request)
     {
         if (!session()->has('student_name')) {
             return redirect()->route('student.login')->with('status', "Unauthorized access student");
         }
+
         $studentName = session('student_name');
         $checkStudent = Student::where('email', $studentName)->first();
+
+        if (!$checkStudent) {
+            return redirect()->route('student.login')->with('status', "Student not found");
+        }
+
         $currentDate = date('Y-m-d');
+
+        // Count of active plans
+        $total['activePlansCount'] = Plan::where('student_id', $checkStudent->id)
+            ->whereDate('valid_upto_date', '>=', $currentDate)
+            ->count();
+
+        // Count of expired plans
+        $total['expiredPlansCount'] = Plan::where('student_id', $checkStudent->id)
+            ->whereDate('valid_upto_date', '<', $currentDate)
+            ->count();
+
+        //  plans for the next 5 days
         $plans = Plan::with('student')
             ->where('student_id', $checkStudent->id)
-            ->whereDate('plans.valid_upto_date', '>=', Carbon::now())
-            ->whereDate('plans.valid_upto_date', '<=', Carbon::now()->addDays(5));
+            ->whereDate('valid_upto_date', '>=', Carbon::now())
+            ->whereDate('valid_upto_date', '<=', Carbon::now()->addDays(5))
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10);
 
-        $plans = $plans->orderBy('created_at', 'DESC')->paginate(10);
-        return view('students.student_dashboard')->with(compact('plans', 'checkStudent'));
+        return view('students.student_dashboard')->with(compact('plans', 'checkStudent', 'total'));
     }
+
 
     // Student Profile Show
 
@@ -165,5 +187,36 @@ class StudentAuthController extends Controller
 
         DB::commit();
         return redirect()->back()->with('status', 'Student updated successfully!');
+    }
+
+
+    // Plan details show student
+
+
+    public function planDetails(Request $request)
+    {
+        $studentEmail = session('student_name');
+        $student = Student::where('email', $studentEmail)->first();
+
+        if (!$student) {
+            return redirect()->route('student.login')->with('status', "Student not found");
+        }
+
+        $currentDate = Carbon::now();
+        $plans = Plan::with('student')
+            ->where('student_id', $student->id)
+            ->orderBy('valid_upto_date', 'ASC')
+            ->get();
+
+        // active and expired plans
+        $activePlans = $plans->filter(function ($plan) use ($currentDate) {
+            return $currentDate->lte($plan->valid_upto_date);
+        });
+
+        $expiredPlans = $plans->filter(function ($plan) use ($currentDate) {
+            return $currentDate->gt($plan->valid_upto_date);
+        });
+
+        return view('students.plan_details', compact('activePlans', 'expiredPlans', 'student'));
     }
 }

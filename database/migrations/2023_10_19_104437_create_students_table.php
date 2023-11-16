@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('password');
             $table->string('personal_number')->unique();
             $table->string('emergency_number')->nullable();
             $table->string('dob')->nullable();
@@ -32,6 +33,7 @@ return new class extends Migration
             $table->string('aadhar_back_img')->nullable();
             $table->string('image')->nullable();
             $table->enum('status',['active','block'])->default('active');
+            $table->rememberToken()->nullable();
             $table->timestamps();
         });
     }

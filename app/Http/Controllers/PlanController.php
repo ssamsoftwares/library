@@ -10,12 +10,13 @@ use Illuminate\Support\Facades\DB;
 use PDF;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Response;
+use Carbon\Carbon;
 
 class PlanController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:plan-list|plan-view|plan-create|plan-edit|plan-delete', ['only' => ['view','index']]);
+        $this->middleware('permission:plan-list|plan-view|plan-create|plan-edit|plan-delete', ['only' => ['view', 'index']]);
         $this->middleware('permission:plan-view', ['only' => ['view']]);
         $this->middleware('permission:plan-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:plan-edit', ['only' => ['edit', 'update']]);
@@ -28,13 +29,17 @@ class PlanController extends Controller
     public function index(Request $request)
     {
         $plans = Plan::with('student');
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $plans->where(function ($query) use ($search) {
+
+        $search = $request->input('search');
+
+        if ($search) {
+            $formattedSearchDate = Carbon::createFromFormat('d-m-Y', $search)->format('Y-m-d');
+
+            $plans->where(function ($query) use ($formattedSearchDate, $search) {
                 $query->where('plan', 'like', '%' . $search . '%')
                     ->orWhere('mode_of_payment', 'like', '%' . $search . '%')
-                    ->orWhere('valid_from_date', 'like', '%' . $search . '%')
-                    ->orWhere('valid_upto_date', 'like', '%' . $search . '%')
+                    ->orWhere('valid_from_date', $formattedSearchDate)
+                    ->orWhere('valid_upto_date', $formattedSearchDate)
                     ->orWhereHas('student', function ($studentSubquery) use ($search) {
                         $studentSubquery->where('name', 'like', '%' . $search . '%')
                             ->orWhere('email', 'like', '%' . $search . '%')
@@ -48,8 +53,6 @@ class PlanController extends Controller
 
         return view('admin.plan.all', compact('plans'));
     }
-
-
 
     //Asign Plan From
     public function create(Request $request)
@@ -73,11 +76,26 @@ class PlanController extends Controller
         }
     }
 
-    // Plans View
-    public function view($plan){
+
+    public function view($plan)
+    {
         $plan = Plan::with('student')->find($plan);
-        return view('admin.plan.view')->with(compact('plan'));
+        $studentId = $plan->student->id;
+
+        $currentDate = Carbon::now();
+        $activePlans = Plan::where('student_id', $studentId)
+            ->where('valid_upto_date', '>=', $currentDate->format('Y-m-d'))
+            ->get();
+
+        $expiredPlans = Plan::where('student_id', $studentId)
+            ->where('valid_upto_date', '<', $currentDate->format('Y-m-d'))
+            ->get();
+
+        return view('admin.plan.view')->with(compact('plan', 'activePlans', 'expiredPlans'));
     }
+
+
+
 
     public function store(Request $request, Plan $plan)
     {
@@ -97,7 +115,6 @@ class PlanController extends Controller
             $existingPlan = Plan::where('student_id', $request->student_id)
                 ->where('valid_upto_date', '>=', $currentDate)
                 ->first();
-
 
             if ($existingPlan) {
                 DB::rollBack();
@@ -129,10 +146,11 @@ class PlanController extends Controller
 
     // Update Plan
 
+
+
     public function update(Request $request, Plan $plan)
     {
         $request->validate([
-            // 'student_search' => 'required',
             'plan' => 'required',
             'mode_of_payment' => 'required',
             'valid_from_date' => 'required|date',
@@ -140,17 +158,20 @@ class PlanController extends Controller
         ]);
 
         DB::beginTransaction();
+
         try {
             $data = $request->all();
             $plan->update($data);
+            // session(['pdfDownloadPlanId' => $plan->id]);
         } catch (Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('status', $e->getMessage());
         }
-
         DB::commit();
         return redirect()->back()->with('status', 'Plan updated successfully.');
     }
+
+
 
     // Delete plan
     public function destroy(Plan $plan)

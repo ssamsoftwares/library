@@ -59,6 +59,18 @@
                     <hr />
 
                     <h5 class="card-title">
+                        <span>Personal Number : </span>
+                        <span>{{ $studentProfile->personal_number }}</span>
+                    </h5>
+                    <hr>
+
+                    <h5 class="card-title">
+                        <span>Emergency Number :</span>
+                        <span>{{ $studentProfile['emergency_number'] }}</span>
+                    </h5>
+                    <hr>
+
+                    {{-- <h5 class="card-title">
                         <span>Subscription : </span>
                         <span>{{ $studentProfile->subscription }}</span>
                     </h5>
@@ -74,7 +86,7 @@
                         <span>Pending Payment : </span>
                         <span>{{ $studentProfile->pending_payment }}</span>
                     </h5>
-                    <hr>
+                    <hr> --}}
 
                 </div>
             </div>
@@ -84,18 +96,6 @@
             <div class="card">
                 <h5 class="card-header">Contact Details</h5>
                 <div class="card-body">
-                    <h5 class="card-title">
-                        <span>Personal Number : </span>
-                        <span>{{ $studentProfile->personal_number }}</span>
-                    </h5>
-                    <hr>
-
-                    <h5 class="card-title">
-                        <span>Emergency Number :</span>
-                        <span>{{ $studentProfile['emergency_number'] }}</span>
-                    </h5>
-                    <hr>
-
                     <h5 class="card-title">
                         <span>Current Address :</span>
                         <span>{{ $studentProfile['current_address'] }}</span>

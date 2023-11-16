@@ -40,12 +40,23 @@
 
                     <div class="row">
                         <div class="col-lg-6">
-                            <x-form.input name="email" label="Email Address"/>
-                        </div>
-                        <div class="col-lg-6">
                             <x-form.input name="dob" label="DOB" type="date" value="<?php echo date('Y-m-d'); ?>"/>
                         </div>
 
+                        <div class="col-lg-6">
+                            <x-form.input name="email" label="Email Address"/>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <x-form.input name="password" label="Passsword" type="password"/>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <x-form.input name="confirm-password" label="Confirm Password" type="password"/>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -54,7 +65,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-lg-6">
                                 <x-form.input name="payment" label="Payment" type="text" />
                             </div>
@@ -62,15 +73,15 @@
                         <div class="col-lg-6">
                                 <x-form.input name="pending_payment" label="Pending Payment" type="text" />
                             </div>
-                     </div>
+                     </div> --}}
 
 
                     <div class="row">
-                        <div class="col-lg-6">
+                        {{-- <div class="col-lg-6">
                             <x-form.input name="subscription" label="Subscription"/>
-                        </div>
+                        </div> --}}
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <x-form.input name="remark_singnature" label="Remark Singnature"/>
                         </div>
                     </div>
@@ -112,7 +123,7 @@
                                 onchange="loadFile(event, 'output1')" class="form-control">
                         </div>
                         <div class="col-lg-5">
-                            <img id="output1" src="" alt="aadhar Img front Preview"
+                            <img id="output1" src="" alt=""
                                 style="max-width: 50%; max-height: 100px;">
                         </div>
                     </div>
@@ -125,7 +136,7 @@
                         </div>
 
                         <div class="col-lg-5">
-                            <img id="output2" src="" alt="aadhar Img back Preview"
+                            <img id="output2" src="" alt=""
                                 style="max-width: 50%; max-height: 100px;">
                         </div>
                     </div>
@@ -138,14 +149,14 @@
                         </div>
 
                         <div class="col-lg-5">
-                            <img id="output3" src="" alt=" student Image Preview"
+                            <img id="output3" src="" alt=""
                                 style="max-width: 50%; max-height: 100px;">
                         </div>
                     </div>
 
 
                     <div>
-                        <button class="btn btn-primary" type="submit">{{__('Add Student')}}</button>
+                        <button class="btn btn-primary mt-2" type="submit">{{__('Add Student')}}</button>
                     </div>
                 </form>
            </div>

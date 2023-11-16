@@ -126,7 +126,7 @@
         <div class="info-row">
             <span>Name: <b
                     class="bold-text">{{ !empty($student->name) ? $student->name : '----------------------------------------------------' }}</b></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span>Date: <?php echo date('Y-m-d'); ?></span>
+            <span>Date: <?php echo date('d-m-Y'); ?></span>
         </div>
 
 
@@ -137,7 +137,6 @@
                     class="bold-text">{{ !empty($student->course) ? $student->course : '----------------------------------------------------' }}</b></span>
         </div>
 
-
         <div class="info-row">
             <span>Validity Start: <b
                     class="bold-text">{{ !empty($student->plan->valid_from_date) ? $student->plan->valid_from_date : '--------------------------------------------' }}</b></span>&nbsp;&nbsp;&nbsp;
@@ -145,6 +144,13 @@
                     class="bold-text">{{ !empty($student->plan->valid_upto_date) ? $student->plan->valid_upto_date : '-----------------------------------------' }}
                 </b></span>
         </div>
+
+
+        {{-- <div class="info-row">
+            <span>Validity Start: <b class="bold-text">{{ !empty($student->plan->valid_from_date) ? $student->plan->valid_from_date->format('d-m-Y') : '--------------------------------------------' }}</b></span>&nbsp;&nbsp;&nbsp;
+            <span>Validity End: <b class="bold-text">{{ !empty($student->plan->valid_upto_date) ? $student->plan->valid_upto_date->format('d-m-Y') : '-----------------------------------------' }}
+                </b></span>
+        </div> --}}
 
 
         {{-- <div class="info-row">
@@ -157,11 +163,9 @@
             {{-- <span>Last Date for Due Amount: ----------------------------------------------------</span> --}}
         </div>
 
-
-
-        <div class="amount">
+        {{-- <div class="amount">
             RS. <span class="box"> {{!empty($student->payment) ? $student->payment : ''}} </span>
-        </div>
+        </div> --}}
 
 
         <div class="info-row">

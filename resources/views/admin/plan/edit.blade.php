@@ -98,8 +98,8 @@
                                 <x-form.select name="plan" label="Plan" chooseFileComment="--Select Plan--"
                                     :options="[
                                         'plan1' => 'Plan1',
-                                        'plan2' => 'Plan2',
-                                        'plan3' => 'Plan3',
+                                        // 'plan2' => 'Plan2',
+                                        // 'plan3' => 'Plan3',
                                     ]" :selected="$plan->plan" />
 
                             </div>
@@ -123,6 +123,8 @@
                         </div>
 
                         <div>
+                            <button type="button" id="downloadPdfBtn" class="btn btn-info">Download PDF</button>
+
                             <button class="btn btn-primary" type="submit">{{ __('Asign Plan Update') }}</button>
                         </div>
                     </form>
@@ -131,3 +133,38 @@
         </div>
     </div>
 @endsection
+
+
+@push('script')
+    <script>
+        $(document).ready(function() {
+            let downloadPdfBtn = $('#downloadPdfBtn')
+            $('#downloadPdfBtn').on('click', function() {
+                let btn = $(this);
+                // let planId = {{ session('pdfDownloadPlanId') ?? 0 }};
+                let planId  = {{ $plan->id}}
+
+                if (!planId) {
+                    alert("No plan  found for download.");
+                    return;
+                }
+                btn.attr("disabled", true);
+                btn.html("Please wait...");
+
+                $.ajax({
+                    type: "get",
+                    url: '{{ url('download-pdf') }}/' + planId,
+
+                    success: function(response) {
+                        window.open('{{ url('download-pdf') }}/' + planId);
+                        btn.attr("disabled", false);
+                        btn.html("Download PDF");
+                    }
+                });
+            })
+        });
+    </script>
+@endpush
+
+
+

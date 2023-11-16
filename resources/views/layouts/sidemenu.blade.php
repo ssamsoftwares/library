@@ -111,6 +111,7 @@
 
                         <ul class="sub-menu" aria-expanded="false">
                             <li><a href="{{route('student.profile')}}">My Profile</a></li>
+                            <li><a href="{{route('student.planDetails')}}">Plan Details</a></li>
                         </ul>
 
                     </li>

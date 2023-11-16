@@ -12,7 +12,7 @@ class Student extends Model implements Authenticatable
 {
     use HasFactory,AuthenticatableTrait;
 
-    protected $fillable = ['name', 'email', 'personal_number', 'emergency_number', 'dob', 'course', 'current_address', 'permanent_address', 'subscription', 'remark_singnature', 'hall_number', 'vehicle_number', 'aadhar_number', 'aadhar_front_img', 'aadhar_back_img', 'image','status','payment','pending_payment'];
+    protected $fillable = ['name', 'email','password', 'personal_number', 'emergency_number', 'dob', 'course', 'current_address', 'permanent_address', 'subscription', 'remark_singnature', 'hall_number', 'vehicle_number', 'aadhar_number', 'aadhar_front_img', 'aadhar_back_img', 'image','status','payment','pending_payment'];
 
     public function plan()
     {

@@ -43,6 +43,14 @@
                         <span>{{ $student->email }}</span>
                     </h5>
                     <hr />
+                    @hasrole('admin')
+                    <h5 class="card-title">
+                        <span>Password  : </span>
+                        <span>{{ $student->password }}</span>
+                    </h5>
+                    <hr />
+                    @endhasrole
+
                     <h5 class="card-title">
                         <span>Date Of Birth : </span>
                         <span>{{ \Carbon\Carbon::parse($student->dob)->format('d-M-Y') }}</span>
@@ -55,7 +63,7 @@
                     </h5>
                     <hr />
 
-                    <h5 class="card-title">
+                    {{-- <h5 class="card-title">
                         <span>Subscription : </span>
                         <span>{{ $student->subscription }}</span>
                     </h5>
@@ -71,7 +79,7 @@
                         <span>Pending Payment : </span>
                         <span>{{ $student->pending_payment }}</span>
                     </h5>
-                    <hr>
+                    <hr> --}}
 
                 </div>
             </div>

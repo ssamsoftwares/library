@@ -7,7 +7,9 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Arr;
 
 class StudentController extends Controller
 {
@@ -28,11 +30,9 @@ class StudentController extends Controller
     {
         $authuser = Auth::user();
         $students = Student::query();
-
         // if(!$authuser->hasRole('admin')){
         //     $students->where('user_id',$authuser->id);
         // }
-
         if ($request->has('search')) {
             $search = $request->input('search');
             $students->where(function ($subquery) use ($search) {
@@ -61,6 +61,7 @@ class StudentController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'string|email|max:255|unique:students',
+            'password' => 'required|same:confirm-password',
             'personal_number' => 'required|unique:students',
             'aadhar_number' => 'required|unique:students',
         ]);
@@ -71,7 +72,7 @@ class StudentController extends Controller
         try {
 
             $data = $request->all();
-
+            // dd($data);
             // AADHAR FRONT IMG
             if ($request->hasFile('aadhar_front_img')) {
                 $aadharFrontImg = $request->file('aadhar_front_img');
@@ -95,6 +96,8 @@ class StudentController extends Controller
                 $studentImg->move(public_path('student_img'), $filename);
                 $data['image'] = 'student_img/' . $filename;
             }
+
+            // $data['password'] = Hash::make($data['password']);
 
             Student::create($data);
         } catch (Exception $e) {
@@ -125,20 +128,9 @@ class StudentController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', Rule::unique('students', 'email')->ignore($student->id)],
+            'password' => 'same:confirm-password',
             'personal_number' => ['required', Rule::unique('students', 'personal_number')->ignore($student->id)],
             'aadhar_number' =>  ['required', Rule::unique('students', 'aadhar_number')->ignore($student->id)],
-            // 'emergency_number' => ['required'],
-            // 'dob' => ['required'],
-            // 'course' => ['required'],
-            // 'current_address' => ['required'],
-            // 'permanent_address' => ['required'],
-            // 'valid_from_date' => ['required'],
-            // 'valid_upto_date' => ['required'],
-            // 'mode_of_payment' => ['required'],
-            // 'subscription' => ['required'],
-            // 'remark_singnature' => ['required'],
-            // 'hall_number' => ['required'],
-            // 'vehicle_number' => ['required'],
             'aadhar_front_img' => ['image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'aadhar_back_img' => ['image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'image' => ['image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
@@ -187,6 +179,13 @@ class StudentController extends Controller
                 $studentImg->move(public_path('student_img'), $filename);
                 $data['image'] = 'student_img/' . $filename;
             }
+
+            if (!empty($data['password'])) {
+                $data['password'] = $data['password'];
+            } else {
+                $data = Arr::except($data, array('password'));
+            }
+
 
             $student->update($data);
         } catch (Exception $e) {

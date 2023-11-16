@@ -45,8 +45,9 @@
                             <td>{{ $p->plan }}</td>
                             <td>{{ $p->student->name }}</td>
                             <td>{{ $p->student->email }}</td>
-                            <td>{{ $p->valid_from_date }}</td>
-                            <td>{{ $p->valid_upto_date }}</td>
+                            <td>{{ \Carbon\Carbon::parse($p->valid_from_date)->format('d-m-Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($p->valid_upto_date)->format('d-m-Y') }}</td>
+
 
                             <td>
                                 <div class="action-btns text-center" role="group">

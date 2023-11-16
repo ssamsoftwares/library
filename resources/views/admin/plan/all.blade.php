@@ -47,8 +47,8 @@
                                     <td>{{ Str::ucfirst($p->plan) }}</td>
                                     <td>{{ $p->student->name }}</td>
                                     <td>{{ $p->student->email }}</td>
-                                    <td>{{ $p->valid_from_date }}</td>
-                                    <td>{{ $p->valid_upto_date }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($p->valid_from_date)->format('d-m-Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($p->valid_upto_date)->format('d-m-Y') }}</td>
                                     <td>
                                         <div class="action-btns text-center" role="group">
 
@@ -67,11 +67,11 @@
                                             @endcan
 
                                             @can('plan-delete')
-                                                <a href="{{ route('plan.delete', ['plan' => $p->id]) }}"
+                                                {{-- <a href="{{ route('plan.delete', ['plan' => $p->id]) }}"
                                                     class="btn btn-danger waves-effect waves-light del"
                                                     onclick="return confirm('Are you sure delete this record !')">
                                                     <i class="ri-delete-bin-line"></i>
-                                                </a>
+                                                </a> --}}
                                             @endcan
 
                                         </div>
