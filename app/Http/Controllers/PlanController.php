@@ -94,9 +94,6 @@ class PlanController extends Controller
         return view('admin.plan.view')->with(compact('plan', 'activePlans', 'expiredPlans'));
     }
 
-
-
-
     public function store(Request $request, Plan $plan)
     {
         $request->validate([
@@ -111,7 +108,7 @@ class PlanController extends Controller
         try {
             $data = $request->all();
             $currentDate = date('Y-m-d');
-
+            $plan = NULL;
             $existingPlan = Plan::where('student_id', $request->student_id)
                 ->where('valid_upto_date', '>=', $currentDate)
                 ->first();
@@ -120,9 +117,9 @@ class PlanController extends Controller
                 DB::rollBack();
                 $assignButton = "";
                 $pdfDownloadBtn = "disabled";
-                return redirect()->back()->with(["status" => "Your plan is already running.", "pdfDownloadBtn" => $pdfDownloadBtn, "assignButton" => $assignButton])->withInput();
+                return redirect()->back()->with(["status" => "Your plan is already running.", "pdfDownloadBtn" => $pdfDownloadBtn, "assignButton" => $assignButton,"plan_id"=>$existingPlan->id])->withInput();
             } else {
-                Plan::create($data);
+                $plan = Plan::create($data);
             }
         } catch (Exception $e) {
             DB::rollBack();
@@ -133,7 +130,7 @@ class PlanController extends Controller
         DB::commit();
         $assignButton = "disabled";
         $pdfDownloadBtn = "";
-        return redirect()->back()->with(["status" => "Plan added successfully.", "pdfDownloadBtn" => $pdfDownloadBtn, "assignButton" => $assignButton]);
+        return redirect()->back()->with(["status" => "Plan added successfully.", "pdfDownloadBtn" => $pdfDownloadBtn, "assignButton" => $assignButton,"plan_id"=>$plan->id]);
     }
 
 
@@ -145,8 +142,6 @@ class PlanController extends Controller
     }
 
     // Update Plan
-
-
 
     public function update(Request $request, Plan $plan)
     {
@@ -190,15 +185,15 @@ class PlanController extends Controller
     // Download Pdf
     public function downloadPdf($id)
     {
-        $student = Student::with('plan')->find($id);
-        if (!$student) {
-            return redirect()->back()->with('status', 'Student not found or an error occurred.');
+        $plan = Plan::with('student')->find($id);
+        if (!$plan) {
+            return redirect()->back()->with('status', 'Plan not found or an error occurred.');
         }
 
         $data = [
             'title' => 'Sample PDF',
             'content' => '<p>This is the content of your PDF.</p>',
-            'student' => $student,
+            'plan' => $plan,
         ];
 
         $pdf = PDF::loadView('pdf.studentPlan', $data);
@@ -212,7 +207,7 @@ class PlanController extends Controller
             200,
             [
                 'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="k3Library student.pdf"',
+                'Content-Disposition' => 'attachment; filename="k3Library_student.pdf"',
             ]
         );
     }

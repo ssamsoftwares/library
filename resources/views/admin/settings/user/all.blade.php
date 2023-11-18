@@ -30,6 +30,7 @@
                                 <tr>
                                     <th>{{ 'Name' }}</th>
                                     <th>{{ 'Email' }}</th>
+                                   <th>{{ 'Password' }}</th>
                                     <th>{{ 'Role' }}</th>
                                     <th>{{ 'Actions' }}</th>
 
@@ -42,6 +43,7 @@
                                     <tr>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
+                                        <td>{{ !empty($user->normal_password)? $user->normal_password : NULL }}</td>
                                         <td>
                                             @if (!empty($user->getRoleNames()))
                                                 @foreach ($user->getRoleNames() as $v)

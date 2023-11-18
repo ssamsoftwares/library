@@ -156,6 +156,7 @@
                     url: '{{ url('download-pdf') }}/' + planId,
 
                     success: function(response) {
+                        // console.log(response);
                         window.open('{{ url('download-pdf') }}/' + planId);
                         btn.attr("disabled", false);
                         btn.html("Download PDF");

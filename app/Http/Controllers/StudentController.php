@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Redirect;
+
 
 class StudentController extends Controller
 {
@@ -24,28 +27,53 @@ class StudentController extends Controller
     }
 
 
-
     // Show list Student
-    public function index(Request $request)
-    {
-        $authuser = Auth::user();
-        $students = Student::query();
-        // if(!$authuser->hasRole('admin')){
-        //     $students->where('user_id',$authuser->id);
-        // }
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $students->where(function ($subquery) use ($search) {
-                $subquery->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('email', 'like', $search . '%')
-                    ->orWhere('personal_number', 'like', $search . '%')
-                    ->orWhere('dob', 'like', $search . '%');
-            });
-        }
-        $students = $students->orderBy('created_at', 'desc')->paginate(10);
+    // public function index(Request $request)
+    // {
+    //     $authuser = Auth::user();
+    //     $students = Student::with('createby');
 
-        return view('admin.student.all')->with(compact('students'));
+
+    //     // if(!$authuser->hasRole('admin')){
+    //     //     $students->where('user_id',$authuser->id);
+    //     // }
+    //     if ($request->has('search')) {
+    //         $search = $request->input('search');
+    //         $students->where(function ($subquery) use ($search) {
+    //             $subquery->where('name', 'like', '%' . $search . '%')
+    //                 ->orWhere('email', 'like', $search . '%')
+    //                 ->orWhere('personal_number', 'like', $search . '%')
+    //                 ->orWhere('dob', 'like', $search . '%');
+    //         });
+    //     }
+    //     $students = $students->orderBy('created_at', 'desc')->paginate(10);
+
+    //     return view('admin.student.all')->with(compact('students'));
+    // }
+
+    public function index(Request $request)
+{
+    $authuser = Auth::user();
+    $students = Student::with('createby');
+
+    if ($request->has('search')) {
+        $search = $request->input('search');
+        $students->where(function ($subquery) use ($search) {
+            $subquery->where('name', 'like', '%' . $search . '%')
+                ->orWhere('email', 'like', $search . '%')
+                ->orWhere('personal_number', 'like', $search . '%')
+                ->orWhere('dob', 'like', $search . '%')
+                ->orWhereHas('createby', function ($query) use ($search) {
+                    $query->where('users.name', 'like', '%' . $search . '%');
+                });
+        });
     }
+
+    $students = $students->orderBy('created_at', 'desc')->paginate(10);
+
+    return view('admin.student.all')->with(compact('students'));
+}
+
 
 
     // Add Student From
@@ -96,9 +124,8 @@ class StudentController extends Controller
                 $studentImg->move(public_path('student_img'), $filename);
                 $data['image'] = 'student_img/' . $filename;
             }
-
             // $data['password'] = Hash::make($data['password']);
-
+            $data['user_id'] = Auth::id();
             Student::create($data);
         } catch (Exception $e) {
             DB::rollBack();
@@ -219,6 +246,5 @@ class StudentController extends Controller
         $studentBlock->update();
         return redirect()->back()->with('status',  $studentBlock->name . ' Student status has been updated.');
     }
-
 
 }

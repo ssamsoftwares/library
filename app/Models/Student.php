@@ -12,11 +12,16 @@ class Student extends Model implements Authenticatable
 {
     use HasFactory,AuthenticatableTrait;
 
-    protected $fillable = ['name', 'email','password', 'personal_number', 'emergency_number', 'dob', 'course', 'current_address', 'permanent_address', 'subscription', 'remark_singnature', 'hall_number', 'vehicle_number', 'aadhar_number', 'aadhar_front_img', 'aadhar_back_img', 'image','status','payment','pending_payment'];
+    protected $fillable = ['user_id','name', 'email','password', 'personal_number', 'emergency_number', 'dob', 'course', 'current_address', 'permanent_address', 'subscription', 'remark_singnature', 'hall_number', 'vehicle_number', 'aadhar_number', 'aadhar_front_img', 'aadhar_back_img', 'image','status','payment','pending_payment'];
 
     public function plan()
     {
         return $this->hasOne(Plan::class);
+    }
+
+    public function createby()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
 }

@@ -47,7 +47,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-lg-6">
                                 <x-form.input name="password" label="Passsword" type="password"/>
                             </div>
@@ -55,7 +55,7 @@
                             <div class="col-lg-6">
                                 <x-form.input name="confirm-password" label="Confirm Password" type="password"/>
                             </div>
-                        </div>
+                        </div> --}}
 
 
                         <div class="row">
@@ -185,6 +185,8 @@
             </div>
         </div>
     </div>
+
+
 @endsection
 
 @push('script')

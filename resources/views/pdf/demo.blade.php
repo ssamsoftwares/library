@@ -118,8 +118,18 @@
 
 
         <div class="logo-container">
-            <img src="https://i0.wp.com/www.k3library.com/wp-content/uploads/2023/03/k3library-for-self-study-indore-logo.webp?w=500&ssl=1"
+            {{-- <img src="https://i0.wp.com/www.k3library.com/wp-content/uploads/2023/03/k3library-for-self-study-indore-logo.webp?w=500&ssl=1"
+                alt="Logo" class="logo"> --}}
+
+                <img src="https://manage.k3library.com/assets/images/logo2.jpeg"
                 alt="Logo" class="logo">
+
+                {{-- <img src="{{asset('assets/images/logo1.jpeg')}}"
+                alt="Logo" class="logo"> --}}
+
+                {{-- <img src="http://127.0.0.1:8000/assets/images/logo2.jpeg"
+                alt="Logo" class="logo"> --}}
+
         </div>
         <div class="receipt">
             <strong style="font-size: 20px; color:#800000; margin-bottom: 50px;">RECEIPT</strong>

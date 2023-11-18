@@ -81,14 +81,6 @@
                     </h5>
                     <hr> --}}
 
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-6">
-            <div class="card">
-                <h5 class="card-header">Contact Details</h5>
-                <div class="card-body">
                     <h5 class="card-title">
                         <span>Personal Number : </span>
                         <span>{{ $student->personal_number }}</span>
@@ -101,6 +93,14 @@
                     </h5>
                     <hr>
 
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card">
+                <h5 class="card-header">Contact Details</h5>
+                <div class="card-body">
                     <h5 class="card-title">
                         <span>Current Address :</span>
                         <span>{{ $student['current_address'] }}</span>
@@ -171,5 +171,7 @@
         </div>
 
     </div>
+
+
 
 @endsection

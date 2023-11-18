@@ -36,6 +36,14 @@
                     <hr>
 
                     <h5 class="card-title">
+                        <span>Password :</span>
+                        <span>
+                            {{ !empty($user->normal_password) ? $user->normal_password  : NULL}}
+                        </span>
+                    </h5>
+                    <hr>
+
+                    <h5 class="card-title">
                         <span>Role :</span>
                             @if (!empty($user->getRoleNames()))
                                 @foreach ($user->getRoleNames() as $v)

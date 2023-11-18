@@ -105,16 +105,23 @@
 
 <body>
     <div class="container">
+        <div class="container">
+            <img src="https://i.pinimg.com/originals/7d/34/d9/7d34d9d53640af5cfd2614c57dfa7f13.png"
+                alt="Student Photo" class="student-photo">
 
-
-        <div class="logo-container">
-            <img src="https://i0.wp.com/www.k3library.com/wp-content/uploads/2023/03/k3library-for-self-study-indore-logo.webp?w=500&ssl=1"
-                alt="Logo" class="logo">
+            <div class="logo-container">
+                <img src="https://i0.wp.com/www.k3library.com/wp-content/uploads/2023/03/k3library-for-self-study-indore-logo.webp?w=500&ssl=1"
+                    alt="Logo" class="logo">
+            </div>
+            <div class="receipt">
+                <strong style="font-size: 20px; color:#800000; margin-bottom: 50px;">RECEIPT</strong>
+            </div>
         </div>
-        <div class="receipt">
-            <strong style="font-size: 20px; color:#800000; margin-bottom: 50px;">RECEIPT</strong>
-        </div>
 
+
+
+
+        
 
         <div class="address">
             <span style="text-start"><strong style="font-size: 20px; color:#800000;">K3</strong> LIBRARY & STUDY
@@ -125,23 +132,23 @@
 
         <div class="info-row">
             <span>Name: <b
-                    class="bold-text">{{ !empty($student->name) ? $student->name : '----------------------------------------------------' }}</b></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    class="bold-text">{{ !empty($plan->student->name) ? $plan->student->name : '----------------------------------------------------' }}</b></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <span>Date: <?php echo date('d-m-Y'); ?></span>
         </div>
 
 
         <div class="contact-info">
             <span>Contact No: <b
-                    class="bold-text">{{ !empty($student->personal_number) ? $student->personal_number : '------------------------------------------' }}</b></span>&nbsp;&nbsp;&nbsp;
+                    class="bold-text">{{ !empty($plan->student->personal_number) ? $plan->student->personal_number : '------------------------------------------' }}</b></span>&nbsp;&nbsp;&nbsp;
             <span>Course: <b
-                    class="bold-text">{{ !empty($student->course) ? $student->course : '----------------------------------------------------' }}</b></span>
+                    class="bold-text">{{ !empty($plan->student->course) ? $plan->student->course : '----------------------------------------------------' }}</b></span>
         </div>
 
         <div class="info-row">
             <span>Validity Start: <b
-                    class="bold-text">{{ !empty($student->plan->valid_from_date) ? $student->plan->valid_from_date : '--------------------------------------------' }}</b></span>&nbsp;&nbsp;&nbsp;
+                    class="bold-text">{{ !empty($plan->valid_from_date) ? $plan->valid_from_date : '--------------------------------------------' }}</b></span>&nbsp;&nbsp;&nbsp;
             <span>Validity End: <b
-                    class="bold-text">{{ !empty($student->plan->valid_upto_date) ? $student->plan->valid_upto_date : '-----------------------------------------' }}
+                    class="bold-text">{{ !empty($plan->valid_upto_date) ? $plan->valid_upto_date : '-----------------------------------------' }}
                 </b></span>
         </div>
 
@@ -159,7 +166,7 @@
         </div> --}}
         <div class="info-row">
             <span>Mode: <b
-                class="bold-text"> {{ !empty($student->plan->mode_of_payment) ?$student->plan->mode_of_payment : '----------------------------------------------------------------------------'}}</b></span>&nbsp;&nbsp;&nbsp;
+                class="bold-text"> {{ !empty($plan->mode_of_payment) ?$plan->mode_of_payment : '----------------------------------------------------------------------------'}}</b></span>&nbsp;&nbsp;&nbsp;
             {{-- <span>Last Date for Due Amount: ----------------------------------------------------</span> --}}
         </div>
 
@@ -194,7 +201,7 @@
         <div class="rules">
             <h3 class="text-center"><strong style="font-size: 25px; color:#800000;">K3</strong> LIBRARY RULES</h3>
             <ul class="rule-list">
-                <li>Keep our library Neat and Clean.</li>
+                <li>Keep library Neat and Clean.</li>
                 <li>Clean up before you Leave.</li>
                 <li>Arrange the chair in table Systematically.</li>
                 <li>Eating food not allowed inside the Library.</li>
@@ -206,7 +213,7 @@
 
         <div class="signature">
             <p><b>STUDENT SIGNATURE</b></p>
-            <p>NAME: <b class="bold-text">{{ !empty($student->name) ? $student->name : ' --------------------' }}</b>
+            <p>NAME: <b class="bold-text">{{ !empty($plan->student->name) ? $plan->student->name : ' --------------------' }}</b>
             </p>
         </div>
 </body>

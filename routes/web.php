@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StudentAuthController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\UserController;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -34,6 +35,10 @@ Route::get('/', function () {
 
 Route::get('/demo-pdf', function () {
     return view('pdf.testPdf');
+});
+
+Route::get('/show-demo-pdf', function () {
+    return view('pdf.demo');
 });
 
 Route::get('/demo-pdf-download', [PlanController::class, 'generatePdf'])->name('generatePdf');
@@ -79,6 +84,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/student-status-update/{id}', [StudentController::class, 'studentStatusUpdate'])->name('student.statusUpdate');
 
+    Route::post('/student-update-password', [StudentController::class, 'update_password'])->name('student.update_password');
+
+
 
     // asign plan
 
@@ -103,23 +111,34 @@ Route::get('/terms', function () {
 })->name('terms');
 
 
-
-
 // STUDENT AUTH ROUTES
 Route::get('student-login', [StudentAuthController::class, 'studentLoginView'])->name('student.login');
 Route::post('student-login', [StudentAuthController::class, 'studentLogin'])->name('student.loginPost');
+
+Route::get('student-forgot-password', [StudentAuthController::class, 'forgotPassword'])
+    ->name('student.passwordRequest');
+
+Route::post('student-forgot-password', [StudentAuthController::class, 'forgotPasswordStore'])
+    ->name('student.forgotPasswordStore');
+
+Route::get('student-reset-password/{token?}', [StudentAuthController::class, 'resetPassword'])
+    ->name('student.passwordReset');
+
+Route::post('student-reset-password', [StudentAuthController::class, 'resetPasswordStore'])
+    ->name('student.resetPasswordStore');
+
 Route::get('student-logout', [StudentAuthController::class, 'studentLogout'])->name('student.logout');
 
 // STUDENT PANEL ROUTES
 Route::middleware(['student'])->group(function () {
-    Route::get('student-dashboard', [StudentAuthController::class, 'studentdashboard'])->name('student.dashboard');
-    Route::get('student-profile', [StudentAuthController::class, 'studentProfile'])->name('student.profile');
+    Route::get('student-dashboard', [StudentDashboardController::class, 'studentdashboard'])->name('student.dashboard');
+    Route::get('student-profile', [StudentDashboardController::class, 'studentProfile'])->name('student.profile');
 
-    Route::get('student-profile-edit', [StudentAuthController::class, 'studentProfileEdit'])->name('student.studentProfileEdit');
+    Route::get('student-profile-edit', [StudentDashboardController::class, 'studentProfileEdit'])->name('student.studentProfileEdit');
 
-    Route::post('student-profile-update', [StudentAuthController::class, 'studentProfileUpdate'])->name('student.studentProfileUpdate');
+    Route::post('student-profile-update', [StudentDashboardController::class, 'studentProfileUpdate'])->name('student.studentProfileUpdate');
 
-    Route::get('plan-details', [StudentAuthController::class, 'planDetails'])->name('student.planDetails');
+    Route::get('plan-details', [StudentDashboardController::class, 'planDetails'])->name('student.planDetails');
 });
 
 

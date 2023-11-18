@@ -53,6 +53,7 @@
                     <form method="post" action="{{ route('plan.store') }}" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="student_id" value="{{ !empty($student) ? $student->id : '' }}">
+                        <input type="hidden" name="plan_id" value="{{ session()->has('plan_id') && !empty(session()->has('plan_id')) ? session()->get('plan_id') : "" }}">
                         <div class="row">
                             <div class="col-lg-6">
                                 <x-form.select name="plan" label="Plan" chooseFileComment="--Select Plan--"
@@ -104,9 +105,9 @@
 
             $('#downloadPdf').on('click', function() {
                 let btn = $(this)
-                let studentId = $('input[name="student_id"]').val();
+                let plan_id = $('input[name="plan_id"]').val();
 
-                if (!studentId) {
+                if (!plan_id) {
                     alert("Please search for a student first.");
                     return;
                 }
@@ -115,11 +116,11 @@
                 btn.html("Please wait...");
                 $.ajax({
                     type: "get",
-                    url: '/download-pdf/' + studentId,
+                    url: '/download-pdf/' + plan_id,
 
                     success: function(response) {
                         // assignBtn.attr('disabled', false)
-                        window.open('/download-pdf/' + studentId);
+                        window.open('/download-pdf/' + plan_id);
                         // btn.attr("disabled",false);
                         btn.html("Download PDF");
                     }

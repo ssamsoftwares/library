@@ -43,6 +43,12 @@
                             {{ __('Log in') }}</button>
                     </div>
                 </div>
+
+                <div class="form-group mb-0 row mt-2">
+                    <div class="col-sm-7 mt-3">
+                       <a href="{{route('student.passwordRequest')}}" class="text-muted"><i class="mdi mdi-lock"></i> {{ __('Forgot your password?') }}</a>
+                    </div>
+                 </div>
             </form>
         </div>
         <!-- end -->

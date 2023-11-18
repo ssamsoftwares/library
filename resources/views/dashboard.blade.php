@@ -14,7 +14,7 @@
 {{-- quick info --}}
 <div class="row">
     <x-design.card heading="Total Student" value="{{$total['student']}}" icon="mdi-account-convert" desc="Student"/>
-    <x-design.card heading="Total Plan" value="{{$total['totalActivePlans']}}"  desc="Activate student plans"/>
+    {{-- <x-design.card heading="Total Plan" value="{{$total['totalActivePlans']}}"  desc="Activate student plans"/> --}}
 </div>
 
 <h4 class="card-title mt-4 mb-4">{{__('Plan Expired Students within 5 days')}}</h4>
@@ -51,8 +51,8 @@
 
                             <td>
                                 <div class="action-btns text-center" role="group">
-                                    <a href="{{ route('plan.edit',['plan'=> $p->id ]) }}" class="btn btn-info waves-effect waves-light edit">
-                                       Renew Plan
+                                    <a href="{{ route('plan.edit',['plan'=> $p->id ]) }}" class="btn btn-info waves-effect waves-light edit btn-sm">
+                                       Update Plan
                                     </a>
 
                                 </div>

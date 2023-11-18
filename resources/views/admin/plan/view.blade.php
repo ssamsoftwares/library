@@ -115,7 +115,7 @@
                                 <td>
                                     <div class="action-btns text-center" role="group">
                                         <a href="{{ route('plan.edit',['plan'=> $p->id ]) }}" class="btn btn-info waves-effect waves-light edit">
-                                           Renew Plan
+                                           Update Plan
                                         </a>
 
                                     </div>
@@ -144,6 +144,7 @@
                                 <th>{{ 'Valid From Date ' }}</th>
                                 <th>{{ 'Valid Upto Date' }}</th>
                                 <th>{{ 'Mode of Payment' }}</th>
+                                <th>{{ 'Action' }}</th>
 
                             </tr>
                         </thead>
@@ -156,6 +157,15 @@
                                 <td>{{ \Carbon\Carbon::parse($exp->valid_from_date)->format('d-m-Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($exp->valid_upto_date)->format('d-m-Y') }}</td>
                                 <td>{{ $exp->mode_of_payment }}</td>
+
+                                <td>
+                                    <div class="action-btns text-center" role="group">
+                                        <a href="{{route('plan.add')}}" class="btn btn-info waves-effect waves-light edit">
+                                           New Plan
+                                        </a>
+
+                                    </div>
+                                </td>
                             </tr>
                             @endforeach
                             @else

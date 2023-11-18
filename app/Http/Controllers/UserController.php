@@ -64,6 +64,7 @@ class UserController extends Controller
         try {
             $input = $request->all();
             $input['password'] = Hash::make($input['password']);
+            $input['normal_password'] = $input['password'];
 
             $user = User::create($input);
             // Assign the "manager" role
@@ -114,6 +115,8 @@ class UserController extends Controller
             // 'roles' => 'required'
         ]);
 
+        // dd($request->all());
+
         DB::beginTransaction();
 
         try {
@@ -121,8 +124,7 @@ class UserController extends Controller
 
             if (!empty($input['password'])) {
                 $input['password'] = Hash::make($input['password']);
-            } else {
-                $input = Arr::except($input, array('password'));
+                $input['normal_password'] = $request->password;;
             }
 
             $user = User::find($id);

@@ -1,11 +1,9 @@
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4"  :status="session('status')" />
- <h4 class="text-muted text-center font-size-18"><b>Forgot Password</b></h4>
-    <form method="POST" class="form-horizontal mt-3" action="{{ route('password.email') }}">
+ <h4 class="text-muted text-center font-size-18"><b>Reset Password</b></h4>
+    <form method="POST" class="form-horizontal mt-3" action="{{ route('student.forgotPasswordStore') }}">
         @csrf
-
-
 
         <!-- Email Address -->
         <div>
