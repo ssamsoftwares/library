@@ -51,7 +51,10 @@
                             @endcan
                             @can('student-create')
                                 <li><a href="{{ route('student.add') }}">Add New</a></li>
+                                <li><a href="{{route('student.bulkUploadStudents')}}">Bulk Upload Student</a></li>
+                                <li><a href="{{route('student.importFileView')}}">Bulk  Upload</a></li>
                             @endcan
+
                             @can('plan-list')
                                 <li><a href="{{ route('plans') }}">Asign Plan</a></li>
                             @endcan
@@ -88,6 +91,8 @@
                             </ul>
                         </li>
                     @endrole
+
+
 
                 @endauth
 

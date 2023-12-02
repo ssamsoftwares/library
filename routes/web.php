@@ -86,7 +86,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/student-update-password', [StudentController::class, 'update_password'])->name('student.update_password');
 
+    // BULK UPLOADED STUDENTS ROUTE
 
+    Route::get('/bulk-upload-student', [StudentController::class, 'bulkUploadStudents'])->name('student.bulkUploadStudents');
+
+    Route::get('/bulk-upload-student-view/{bulkUploadStudent?}', [StudentController::class, 'bulkUploadStudentsView'])->name('student.bulkUploadStudentsView');
+
+    Route::get('/import-student', [StudentController::class, 'importFileView'])->name('student.importFileView');
+
+    Route::post('/import-student', [StudentController::class, 'import'])->name('student.import');
+
+    Route::get('/download-sampleCsv-student', [StudentController::class, 'downloadSampleCsv'])->name('student.downloadSampleCsv');
 
     // asign plan
 

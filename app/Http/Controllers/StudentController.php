@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ImportStudent;
+use App\Models\BulkUploadStudent;
 use App\Models\Student;
 use Exception;
 use Illuminate\Http\Request;
@@ -12,6 +14,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Redirect;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class StudentController extends Controller
@@ -28,52 +31,28 @@ class StudentController extends Controller
 
 
     // Show list Student
-    // public function index(Request $request)
-    // {
-    //     $authuser = Auth::user();
-    //     $students = Student::with('createby');
-
-
-    //     // if(!$authuser->hasRole('admin')){
-    //     //     $students->where('user_id',$authuser->id);
-    //     // }
-    //     if ($request->has('search')) {
-    //         $search = $request->input('search');
-    //         $students->where(function ($subquery) use ($search) {
-    //             $subquery->where('name', 'like', '%' . $search . '%')
-    //                 ->orWhere('email', 'like', $search . '%')
-    //                 ->orWhere('personal_number', 'like', $search . '%')
-    //                 ->orWhere('dob', 'like', $search . '%');
-    //         });
-    //     }
-    //     $students = $students->orderBy('created_at', 'desc')->paginate(10);
-
-    //     return view('admin.student.all')->with(compact('students'));
-    // }
-
     public function index(Request $request)
-{
-    $authuser = Auth::user();
-    $students = Student::with('createby');
+    {
+        $authuser = Auth::user();
+        $students = Student::with('createby');
 
-    if ($request->has('search')) {
-        $search = $request->input('search');
-        $students->where(function ($subquery) use ($search) {
-            $subquery->where('name', 'like', '%' . $search . '%')
-                ->orWhere('email', 'like', $search . '%')
-                ->orWhere('personal_number', 'like', $search . '%')
-                ->orWhere('dob', 'like', $search . '%')
-                ->orWhereHas('createby', function ($query) use ($search) {
-                    $query->where('users.name', 'like', '%' . $search . '%');
-                });
-        });
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $students->where(function ($subquery) use ($search) {
+                $subquery->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', $search . '%')
+                    ->orWhere('personal_number', 'like', $search . '%')
+                    ->orWhere('dob', 'like', $search . '%')
+                    ->orWhereHas('createby', function ($query) use ($search) {
+                        $query->where('users.name', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        $students = $students->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('admin.student.all')->with(compact('students'));
     }
-
-    $students = $students->orderBy('created_at', 'desc')->paginate(10);
-
-    return view('admin.student.all')->with(compact('students'));
-}
-
 
 
     // Add Student From
@@ -94,13 +73,10 @@ class StudentController extends Controller
             'aadhar_number' => 'required|unique:students',
         ]);
 
-        // dd($request->all());
-
         DB::beginTransaction();
         try {
 
             $data = $request->all();
-            // dd($data);
             // AADHAR FRONT IMG
             if ($request->hasFile('aadhar_front_img')) {
                 $aadharFrontImg = $request->file('aadhar_front_img');
@@ -242,9 +218,87 @@ class StudentController extends Controller
     public function studentStatusUpdate($id)
     {
         $studentBlock = Student::find($id);
-        $studentBlock->status = $studentBlock->status=='active'?'block':'active';
+        $studentBlock->status = $studentBlock->status == 'active' ? 'block' : 'active';
         $studentBlock->update();
         return redirect()->back()->with('status',  $studentBlock->name . ' Student status has been updated.');
     }
 
+
+
+    /**
+     *---------------------------------------------------------------------
+     * BULK UPLOAD STUDENTES FUNCTIONS
+     *---------------------------------------------------------------------
+     */
+
+    public function bulkUploadStudents(Request $request)
+    {
+        $bulkUploadStudents = BulkUploadStudent::with('createbyStudent');
+
+        if (!empty($request->search)) {
+            $search = $request->search;
+            $bulkUploadStudents->where(function ($subquery) use ($search) {
+                $subquery->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('phone_number', 'like', '%' . $search . '%')
+                    ->orWhere('course', 'like', '%' . $search . '%')
+                    ->orWhere('graduation', 'like', '%' . $search . '%')
+                    ->orWhereHas('createbyStudent', function ($query) use ($search) {
+                        $query->where('users.name', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        $bulkUploadStudents = $bulkUploadStudents->paginate(10);
+
+        return view('admin.bulkUpload_student.all', compact('bulkUploadStudents'));
+    }
+
+
+
+    public function bulkUploadStudentsView(BulkUploadStudent $bulkUploadStudent)
+    {
+        return view('admin.bulkUpload_student.view', compact('bulkUploadStudent'));
+    }
+
+
+    public function importFileView()
+    {
+        return view('admin.bulkUpload_student.bulk_upload');
+    }
+
+    public function import(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $file = $request->file('file');
+            $import = new ImportStudent();
+            Excel::import($import, $file);
+            $newStudentCount = $import->getNewStudentCount();
+            $updatedStudentCount = $import->getUpdatedStudentCount();
+            $totalStudentCount = $newStudentCount + $updatedStudentCount;
+            $uploadedFileName = $file->getClientOriginalName();
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'File import failed: ' . $e->getMessage()]);
+        }
+        DB::commit();
+        $message = "File <strong>'{$uploadedFileName}'</strong> successfully imported. <strong>{$newStudentCount}</strong> new Students added and <strong>{$updatedStudentCount}</strong> updated from <strong>{$totalStudentCount}</strong> records.";
+        return response()->json(['message' => $message]);
+    }
+
+
+    public function downloadSampleCsv()
+    {
+        DB::beginTransaction();
+        $filePath = storage_path('app/public/sample.csv');
+        $fileName = 'sample.csv';
+        if (file_exists($filePath)) {
+            return response()->download($filePath, $fileName, [
+                'Content-Type' => 'application/csv',
+                'Content-Disposition' => 'attachment; filename=' . $fileName,
+            ]);
+        }
+        return redirect()->back()->with('status', 'Sample CSV file Not Found.');
+    }
 }

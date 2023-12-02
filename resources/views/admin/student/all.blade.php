@@ -52,10 +52,21 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="justify-content-end d-flex">
-                    <x-search.table-search action="{{ route('students') }}" method="get" name="search"
+                <div class="row m-2 mt-4 justify-content-end d-flex">
+                    <div class="col-lg-4 mt-4">
+                      <a href="{{route('student.bulkUploadStudents')}}" class="btn btn-info btn-sm"> Bulk Upload Students View</a>
+                      <a href="{{route('students')}}" class="btn btn-success btn-sm">Students View</a>
+                    </div>
+
+                    <div class="col-lg-4 mt-4">
+                    </div>
+
+                    <div class="col-lg-4">
+                        <x-search.table-search action="{{ route('students') }}" method="get" name="search"
                         value="{{ isset($_REQUEST['search']) ? $_REQUEST['search'] : '' }}" btnClass="search_btn" />
+                    </div>
                 </div>
+
                 <div class="card-body">
                     <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap"
                         style="border-collapse: collapse; border-spacing: 0; width: 100%;">
