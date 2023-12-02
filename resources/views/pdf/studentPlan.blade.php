@@ -106,8 +106,15 @@
 <body>
     <div class="container">
         <div class="container">
-            <img src="https://i.pinimg.com/originals/7d/34/d9/7d34d9d53640af5cfd2614c57dfa7f13.png"
-                alt="Student Photo" class="student-photo">
+            {{-- <img src="https://i.pinimg.com/originals/7d/34/d9/7d34d9d53640af5cfd2614c57dfa7f13.png"
+                alt="Student Photo" class="student-photo"> --}}
+                @if (!empty($plan->student->image))
+                <img src="https://manage.k3library.com/{{$plan->student->image}}"
+                alt="Student Photo" class="logo">
+                @else
+                <img src="https://png.pngtree.com/png-vector/20210604/ourmid/pngtree-gray-avatar-placeholder-png-image_3416697.jpg"
+                alt="Student Photo" class="logo">
+                @endif
 
             <div class="logo-container">
                 <img src="https://i0.wp.com/www.k3library.com/wp-content/uploads/2023/03/k3library-for-self-study-indore-logo.webp?w=500&ssl=1"
@@ -121,7 +128,7 @@
 
 
 
-        
+
 
         <div class="address">
             <span style="text-start"><strong style="font-size: 20px; color:#800000;">K3</strong> LIBRARY & STUDY

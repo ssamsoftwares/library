@@ -40,12 +40,12 @@
                         </div>
                     </div>
 
-                    {{-- <div class="row">
+                    <div class="row">
                         <div class="col-lg-12">
                             <x-form.select label="Role" chooseFileComment="--Select Role--"
                                 name="roles" :options="$roles" />
                         </div>
-                    </div> --}}
+                    </div>
 
                     <div>
                         <button class="btn btn-primary mt-2" type="submit">{{__('Add User')}}</button>

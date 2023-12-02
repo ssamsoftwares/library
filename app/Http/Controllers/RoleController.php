@@ -111,14 +111,14 @@ class RoleController extends Controller
         try {
             $role = Role::find($id);
 
-            // Check if the role is not the admin role
-            if ($role->name !== 'admin') {
+            //Check if the role is not the superadmin role
+            if ($role->name !== 'superadmin') {
                 $permission = Permission::find($request->input('permission'))->pluck('name');
                 $role->syncPermissions($permission);
                 $role->save();
             } else {
-                // Admin role not be updated
-                throw new \Exception("You are not allowed to update permission the admin role.");
+                // Superadmin role not be updated
+                throw new \Exception("You are not allowed to update permission the Superadmin role.");
             }
         } catch (Exception $e) {
             DB::rollback();

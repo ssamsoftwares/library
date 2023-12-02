@@ -1,11 +1,11 @@
 @extends('layouts.main')
 
 @push('page-title')
-    <title>All Managers</title>
+    <title>All Users</title>
 @endpush
 
 @push('heading')
-    {{ 'Managers' }}
+    {{ 'Users' }}
 @endpush
 
 @section('content')
@@ -39,7 +39,7 @@
 
                             <tbody id="candidatesData">
                                 @foreach ($data as $key => $user)
-                                @if (!$user->hasRole('admin'))
+                                @if (!$user->hasRole('superadmin'))
                                     <tr>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>

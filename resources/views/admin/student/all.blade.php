@@ -10,6 +10,41 @@
 
 @section('content')
     @push('style')
+        <style>
+            .ri-eye-line:before {
+                content: "\ec95";
+                position: absolute;
+                left: 13px;
+                top: 5px;
+            }
+
+            a.btn.btn-primary.waves-effect.waves-light.view {
+                width: 41px;
+                height: 32px;
+            }
+
+            .action-btns.text-center {
+                display: flex;
+                gap: 10px;
+            }
+
+            .ri-pencil-line:before {
+                content: "\ef8c";
+                position: absolute;
+                left: 13px;
+                top: 5px;
+            }
+
+            a.btn.btn-info.waves-effect.waves-light.edit {
+                width: 41px;
+                height: 32px;
+            }
+
+
+            table.dataTable>tbody>tr.child ul.dtr-details>li {
+                white-space: nowrap !important;
+            }
+        </style>
     @endpush
 
     <x-status-message />
@@ -29,7 +64,7 @@
                                 <th>{{ 'Student Photo' }}</th>
                                 <th>{{ 'Name' }}</th>
                                 <th>{{ 'Email' }}</th>
-                                @hasrole('admin')
+                                @hasrole('superadmin')
                                     <th>{{ 'Password' }}</th>
                                 @endhasrole
                                 <th>{{ 'Phone' }}</th>
@@ -52,7 +87,7 @@
                                     </td>
                                     <td>{{ $stu->name }}</td>
                                     <td>{{ $stu->email }}</td>
-                                    @hasrole('admin')
+                                    @hasrole('superadmin')
                                         <td>{{ $stu->password }}</td>
                                     @endhasrole
                                     <td>{{ $stu->personal_number }}</td>
@@ -63,13 +98,13 @@
                                             $statusAction = $stu->status == 'active' ? 'block' : 'active';
                                             $roleBasedUrl = auth()
                                                 ->user()
-                                                ->hasRole('admin')
+                                                ->hasRole('superadmin')
                                                 ? route('student.statusUpdate', ['id' => $stu->id, 'action' => $statusAction])
                                                 : '#';
                                         @endphp
 
                                         <a href="{{ $roleBasedUrl }}"
-                                            onclick="{{ auth()->user()->hasRole('admin')? "return confirm('Are You Sure " . ($stu->status == 'active' ? 'Block' : 'Active') . " This student.')": '' }}">
+                                            onclick="{{ auth()->user()->hasRole('superadmin')? "return confirm('Are You Sure " . ($stu->status == 'active' ? 'Block' : 'Active') . " This student.')": '' }}">
                                             <span
                                                 class="btn btn-{{ $stu->status == 'active' ? 'success' : 'danger' }} btn-sm">
                                                 {{ $stu->status == 'active' ? 'Active' : 'Block' }}
@@ -85,7 +120,6 @@
                                                     <i class="ri-eye-line"></i>
                                                 </a>
                                             @endcan
-
 
                                             @can('student-edit')
                                                 <a href="{{ route('student.edit', ['student' => $stu->id]) }}"

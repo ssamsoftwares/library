@@ -23,23 +23,21 @@ class PlanController extends Controller
         $this->middleware('permission:plan-delete', ['only' => ['destroy']]);
     }
 
-
-
-    //Show Plan List
     public function index(Request $request)
     {
         $plans = Plan::with('student');
-
         $search = $request->input('search');
 
-        if ($search) {
+        if ($search && Carbon::hasFormat($search, 'd-m-Y')) {
             $formattedSearchDate = Carbon::createFromFormat('d-m-Y', $search)->format('Y-m-d');
-
-            $plans->where(function ($query) use ($formattedSearchDate, $search) {
+            $plans->where(function ($query) use ($formattedSearchDate) {
+                $query->orWhere('valid_from_date', 'like', '%' . $formattedSearchDate . '%')
+                    ->orWhere('valid_upto_date', 'like', '%' . $formattedSearchDate . '%');
+            });
+        } elseif ($search) {
+            $plans->where(function ($query) use ($search) {
                 $query->where('plan', 'like', '%' . $search . '%')
                     ->orWhere('mode_of_payment', 'like', '%' . $search . '%')
-                    ->orWhere('valid_from_date', $formattedSearchDate)
-                    ->orWhere('valid_upto_date', $formattedSearchDate)
                     ->orWhereHas('student', function ($studentSubquery) use ($search) {
                         $studentSubquery->where('name', 'like', '%' . $search . '%')
                             ->orWhere('email', 'like', '%' . $search . '%')
@@ -117,7 +115,7 @@ class PlanController extends Controller
                 DB::rollBack();
                 $assignButton = "";
                 $pdfDownloadBtn = "disabled";
-                return redirect()->back()->with(["status" => "Your plan is already running.", "pdfDownloadBtn" => $pdfDownloadBtn, "assignButton" => $assignButton,"plan_id"=>$existingPlan->id])->withInput();
+                return redirect()->back()->with(["status" => "Your plan is already running.", "pdfDownloadBtn" => $pdfDownloadBtn, "assignButton" => $assignButton, "plan_id" => $existingPlan->id])->withInput();
             } else {
                 $plan = Plan::create($data);
             }
@@ -130,7 +128,7 @@ class PlanController extends Controller
         DB::commit();
         $assignButton = "disabled";
         $pdfDownloadBtn = "";
-        return redirect()->back()->with(["status" => "Plan added successfully.", "pdfDownloadBtn" => $pdfDownloadBtn, "assignButton" => $assignButton,"plan_id"=>$plan->id]);
+        return redirect()->back()->with(["status" => "Plan added successfully.", "pdfDownloadBtn" => $pdfDownloadBtn, "assignButton" => $assignButton, "plan_id" => $plan->id]);
     }
 
 
@@ -157,7 +155,6 @@ class PlanController extends Controller
         try {
             $data = $request->all();
             $plan->update($data);
-            // session(['pdfDownloadPlanId' => $plan->id]);
         } catch (Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('status', $e->getMessage());

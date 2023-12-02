@@ -45,7 +45,7 @@ Route::get('/demo-pdf-download', [PlanController::class, 'generatePdf'])->name('
 
 
 
-Route::group(['middleware' => ['auth', '\Spatie\Permission\Middleware\RoleMiddleware:admin']], function () {
+Route::group(['middleware' => ['auth', '\Spatie\Permission\Middleware\RoleMiddleware:superadmin']], function () {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
 });

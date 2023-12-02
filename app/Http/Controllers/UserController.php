@@ -44,7 +44,8 @@ class UserController extends Controller
      */
     public function create(): View
     {
-        $roles = Role::pluck('name', 'name')->all();
+        // $roles = Role::pluck('name', 'name')->all();
+        $roles = Role::whereNotIn('name', ['superadmin'])->pluck('name', 'name')->all();
         return view('admin.settings.user.add', compact('roles'));
     }
 
@@ -57,18 +58,24 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
+            'roles' => 'required'
+
         ]);
+
 
         DB::beginTransaction();
 
         try {
             $input = $request->all();
+            $input['normal_password'] = $request->password;
             $input['password'] = Hash::make($input['password']);
-            $input['normal_password'] = $input['password'];
+
 
             $user = User::create($input);
             // Assign the "manager" role
-            $user->assignRole('manager');
+            // $user->assignRole('manager');
+            $user->assignRole($request->roles);
+
         } catch (Exception $e) {
             DB::rollback();
             return redirect()->back()->with('status', $e->getMessage());
@@ -97,7 +104,8 @@ class UserController extends Controller
     public function edit($id): View
     {
         $user = User::find($id);
-        $roles = Role::pluck('name', 'name')->all();
+        // $roles = Role::pluck('name', 'name')->all();
+        $roles = Role::whereNotIn('name', ['superadmin'])->pluck('name', 'name')->all();
         $userRole = $user->roles->pluck('name', 'name')->all();
 
         return view('admin.settings.user.edit', compact('user', 'roles', 'userRole'));
@@ -123,15 +131,18 @@ class UserController extends Controller
             $input = $request->all();
 
             if (!empty($input['password'])) {
+                $input['normal_password'] = $request->password;
                 $input['password'] = Hash::make($input['password']);
-                $input['normal_password'] = $request->password;;
+            }else {
+                $input = Arr::except($input, array('password'));
             }
 
             $user = User::find($id);
             $user->update($input);
 
             // Assign the "manager" role
-            $user->assignRole('manager');
+            // $user->assignRole('manager');
+            $user->assignRole($request->roles);
         } catch (Exception $e) {
             DB::rollback();
             return redirect()->back()->with('status', $e->getMessage());

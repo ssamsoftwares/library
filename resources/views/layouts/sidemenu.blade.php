@@ -5,7 +5,7 @@
 
         <div class="user-profile text-center mt-3">
             @if (auth()->check())
-                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager'))
+                @if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager'))
                     <div class="mt-3">
                         <h4 class="font-size-16 mb-1">Hello {{ ucfirst(request()->user()->name) }}</h4>
                         <span class="text-muted">
@@ -58,12 +58,12 @@
                         </ul>
                     </li>
 
-                    @role('admin')
-                        <li class="menu-title">Manager</li>
+                    @role('superadmin')
+                        <li class="menu-title">Users</li>
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
                                 <i class="ri-account-circle-line"></i>
-                                <span>Manager</span>
+                                <span>User</span>
                             </a>
 
                             <ul class="sub-menu" aria-expanded="false">
@@ -74,7 +74,7 @@
                         </li>
                     @endrole
 
-                    @role('admin')
+                    @role('superadmin')
                         <li class="menu-title">Settings</li>
                         <li class="{{ request()->is('users/*') || request()->is('roles/*') ? 'active' : '' }}">
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
