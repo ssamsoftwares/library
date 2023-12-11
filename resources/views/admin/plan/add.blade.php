@@ -53,7 +53,21 @@
                     <form method="post" action="{{ route('plan.store') }}" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="student_id" value="{{ !empty($student) ? $student->id : '' }}">
-                        <input type="hidden" name="plan_id" value="{{ session()->has('plan_id') && !empty(session()->has('plan_id')) ? session()->get('plan_id') : "" }}">
+                        <input type="hidden" name="plan_id"
+                            value="{{ session()->has('plan_id') && !empty(session()->has('plan_id')) ? session()->get('plan_id') : '' }}">
+
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-form.select name="library_branch" label="Library Branch" chooseFileComment="--Select Branch--"
+                                    :options="[
+                                        'Vijaynagar' => 'Vijay Nagar',
+                                        'Marimata' => 'Marimata',
+                                    ]" />
+
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-lg-6">
                                 <x-form.select name="plan" label="Plan" chooseFileComment="--Select Plan--"

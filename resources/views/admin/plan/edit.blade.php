@@ -93,6 +93,18 @@
                         {{-- Plan Details End --}}
 
                         <h4 class="card-title mb-3">{{ __('Edit the Plan Details') }}</h4>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-form.select name="library_branch" label="Library Branch" chooseFileComment="--Select Branch--"
+                                    :options="[
+                                        'Vijaynagar' => 'Vijay Nagar',
+                                        'Marimata' => 'Marimata',
+                                    ]" :selected="$plan->library_branch" />
+
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-lg-6">
                                 <x-form.select name="plan" label="Plan" chooseFileComment="--Select Plan--"

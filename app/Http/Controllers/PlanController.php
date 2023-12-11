@@ -100,6 +100,7 @@ class PlanController extends Controller
             'mode_of_payment' => 'required',
             'valid_from_date' => 'required|date',
             'valid_upto_date' => 'required|date',
+            'library_branch' => 'nullable',
         ]);
 
         DB::beginTransaction();
@@ -148,6 +149,7 @@ class PlanController extends Controller
             'mode_of_payment' => 'required',
             'valid_from_date' => 'required|date',
             'valid_upto_date' => 'required|date',
+            'library_branch' => 'nullable',
         ]);
 
         DB::beginTransaction();

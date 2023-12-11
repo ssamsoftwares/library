@@ -10,7 +10,7 @@ class Plan extends Model
     use HasFactory;
 
     protected $fillable = [
-        'student_id', 'plan', 'mode_of_payment', 'valid_from_date', 'valid_upto_date',
+        'student_id', 'plan', 'mode_of_payment', 'valid_from_date', 'valid_upto_date','library_branch'
     ];
 
     public function student()

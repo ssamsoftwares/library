@@ -30,6 +30,13 @@
                     </h5>
                     <hr>
 
+                    <h5 class="card-title">
+                        <span>{{'Library Branch'}} :</span>
+                        <span>{{ !empty($plan['library_branch'])? $plan['library_branch'] : ''}}</span>
+                    </h5>
+                    <hr>
+
+
 
                     <h5 class="card-title">
                         <span>{{ 'Valid From Date ' }} :</span>
