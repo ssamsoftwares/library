@@ -99,25 +99,6 @@
             padding: 10px 100px;
             margin: 20px 0px 15px 5px;
         }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            align-content: center;
-        }
-
-        .photo-container {
-            position: absolute;
-            top:5px;
-        }
-
-        .student-photo {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-
-        }
     </style>
 
 </head>
@@ -125,32 +106,29 @@
 <body>
     <div class="container">
         <div class="container">
-            <div class="header">
+            {{-- <img src="https://i.pinimg.com/originals/7d/34/d9/7d34d9d53640af5cfd2614c57dfa7f13.png"
+                alt="Student Photo" class="student-photo"> --}}
                 @if (!empty($plan->student->image))
-                    <div class="photo-container">
-                        <img src="https://manage.k3library.com/{{ $plan->student->image }}" alt="Student Photo"
-                            class="student-photo">
-                    </div>
+                <img src="https://manage.k3library.com/{{$plan->student->image}}"
+                alt="Student Photo" class="logo">
                 @else
-                    <div class="photo-container">
-                        <img src="https://png.pngtree.com/png-vector/20210604/ourmid/pngtree-gray-avatar-placeholder-png-image_3416697.jpg"
-                            alt="Student Photo" class="student-photo">
-                    </div>
+                <img src="https://png.pngtree.com/png-vector/20210604/ourmid/pngtree-gray-avatar-placeholder-png-image_3416697.jpg"
+                alt="Student Photo" class="logo">
                 @endif
 
-                <div class="logo-container">
-                    {{-- <img src="https://i0.wp.com/www.k3library.com/wp-content/uploads/2023/03/k3library-for-self-study-indore-logo.webp?w=500&ssl=1"
-                        alt="Logo" class="logo"> --}}
-                        <img src="https://manage.k3library.com/assets/images/logo2.jpeg"
-                alt="Logo" class="logo">
-                </div>
-
+            <div class="logo-container">
+                <img src="https://i0.wp.com/www.k3library.com/wp-content/uploads/2023/03/k3library-for-self-study-indore-logo.webp?w=500&ssl=1"
+                    alt="Logo" class="logo">
             </div>
-
             <div class="receipt">
                 <strong style="font-size: 20px; color:#800000; margin-bottom: 50px;">RECEIPT</strong>
             </div>
         </div>
+
+
+
+
+
 
         <div class="address">
             <span style="text-start"><strong style="font-size: 20px; color:#800000;">K3</strong> LIBRARY & STUDY
@@ -175,9 +153,9 @@
 
         <div class="info-row">
             <span>Validity Start: <b
-                    class="bold-text">{{ !empty($formattedValidFromDate) ? $formattedValidFromDate : '--------------------------------------------' }}</b></span>&nbsp;&nbsp;&nbsp;
+                    class="bold-text">{{ !empty($plan->valid_from_date) ? $plan->valid_from_date : '--------------------------------------------' }}</b></span>&nbsp;&nbsp;&nbsp;
             <span>Validity End: <b
-                    class="bold-text">{{ !empty($formattedValidUptoDate) ? $formattedValidUptoDate : '-----------------------------------------' }}
+                    class="bold-text">{{ !empty($plan->valid_upto_date) ? $plan->valid_upto_date : '-----------------------------------------' }}
                 </b></span>
         </div>
 
@@ -194,8 +172,8 @@
                 -------------------------------------------------------------------------------------------------------</span>
         </div> --}}
         <div class="info-row">
-            <span>Mode: <b class="bold-text">
-                    {{ !empty($plan->mode_of_payment) ? $plan->mode_of_payment : '----------------------------------------------------------------------------' }}</b></span>&nbsp;&nbsp;&nbsp;
+            <span>Mode: <b
+                class="bold-text"> {{ !empty($plan->mode_of_payment) ?$plan->mode_of_payment : '----------------------------------------------------------------------------'}}</b></span>&nbsp;&nbsp;&nbsp;
             {{-- <span>Last Date for Due Amount: ----------------------------------------------------</span> --}}
         </div>
 
@@ -242,8 +220,7 @@
 
         <div class="signature">
             <p><b>STUDENT SIGNATURE</b></p>
-            <p>NAME: <b
-                    class="bold-text">{{ !empty($plan->student->name) ? $plan->student->name : ' --------------------' }}</b>
+            <p>NAME: <b class="bold-text">{{ !empty($plan->student->name) ? $plan->student->name : ' --------------------' }}</b>
             </p>
         </div>
 </body>

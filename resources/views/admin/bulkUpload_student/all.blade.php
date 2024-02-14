@@ -69,7 +69,6 @@
                         style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
-
                                 <th>{{ 'Name' }}</th>
                                 <th>{{ 'Email' }}</th>
                                 <th>{{ 'Phone' }}</th>
@@ -95,13 +94,20 @@
                                                     <i class="ri-eye-line"></i>
                                                 </a>
                                             @endcan
+
+                                            @can('student-edit')
+                                            <a href="{{ route('student.bulkUploadStudentsUpdate', ['bulkUploadStudent' => $stu->id]) }}"
+                                                class="btn btn-info waves-effect waves-light edit">
+                                                <i class="ri-pencil-line"></i>
+                                            </a>
+                                        @endcan
                                         </div>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    {{ $bulkUploadStudents->onEachSide(5)->links() }}
+                    {{ $bulkUploadStudents->appends(request()->query())->links() }}
                 </div>
             </div>
         </div> <!-- end col -->

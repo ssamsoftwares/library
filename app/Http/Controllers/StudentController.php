@@ -29,7 +29,6 @@ class StudentController extends Controller
         $this->middleware('permission:student-delete', ['only' => ['destroy']]);
     }
 
-
     // Show list Student
     public function index(Request $request)
     {
@@ -255,10 +254,28 @@ class StudentController extends Controller
     }
 
 
-
     public function bulkUploadStudentsView(BulkUploadStudent $bulkUploadStudent)
     {
         return view('admin.bulkUpload_student.view', compact('bulkUploadStudent'));
+    }
+
+    public function bulkUploadStudentsEdit(BulkUploadStudent $bulkUploadStudent)
+    {
+        return view('admin.bulkUpload_student.edit', compact('bulkUploadStudent'));
+    }
+
+    public function bulkUploadStudentsUpdate(Request $request, BulkUploadStudent $bulkUploadStudent)
+    {
+        DB::beginTransaction();
+        try {
+            $data = $request->all();
+            $bulkUploadStudent->update($data);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('status', $e->getMessage());
+        }
+        DB::commit();
+        return redirect()->back()->with('status', 'Student Updated Successfully !');
     }
 
 

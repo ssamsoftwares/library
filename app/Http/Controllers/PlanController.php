@@ -58,6 +58,7 @@ class PlanController extends Controller
         $student = null;
         $assignButton = "disabled";
         $pdfDownloadBtn = "disabled";
+
         if (!empty($request->input('student_search'))) {
             $student = Student::where('personal_number', $request->input('student_search'))->orWhere('aadhar_number', $request->input('student_search'))->orWhere('email', $request->input('student_search'))->first();
             if ($student == NULL) {
@@ -182,20 +183,58 @@ class PlanController extends Controller
     }
 
     // Download Pdf
+    // public function downloadPdf($id)
+    // {
+    //     $plan = Plan::with('student')->find($id);
+    //     if (!$plan) {
+    //         return redirect()->back()->with('status', 'Plan not found or an error occurred.');
+    //     }
+
+    //     $data = [
+    //         'title' => 'Sample PDF',
+    //         'content' => '<p>This is the content of your PDF.</p>',
+    //         'plan' => $plan,
+    //     ];
+
+    //     $pdf = PDF::loadView('pdf.studentPlan', $data);
+    //     // Generate the PDF
+    //     $pdfFile = $pdf->output();
+
+    //     return response()->stream(
+    //         function () use ($pdfFile) {
+    //             echo $pdfFile;
+    //         },
+    //         200,
+    //         [
+    //             'Content-Type' => 'application/pdf',
+    //             'Content-Disposition' => 'attachment; filename="k3Library_student.pdf"',
+    //         ]
+    //     );
+    // }
+
+
     public function downloadPdf($id)
     {
         $plan = Plan::with('student')->find($id);
+
         if (!$plan) {
             return redirect()->back()->with('status', 'Plan not found or an error occurred.');
         }
+
+        // Format the dates using Carbon
+        $formattedValidFromDate = Carbon::parse($plan->valid_from_date)->format('d-m-Y');
+        $formattedValidUptoDate = Carbon::parse($plan->valid_upto_date)->format('d-m-Y');
 
         $data = [
             'title' => 'Sample PDF',
             'content' => '<p>This is the content of your PDF.</p>',
             'plan' => $plan,
+            'formattedValidFromDate' => $formattedValidFromDate,
+            'formattedValidUptoDate' => $formattedValidUptoDate,
         ];
 
         $pdf = PDF::loadView('pdf.studentPlan', $data);
+
         // Generate the PDF
         $pdfFile = $pdf->output();
 
@@ -210,6 +249,7 @@ class PlanController extends Controller
             ]
         );
     }
+
 
 
     // demo pdf testing

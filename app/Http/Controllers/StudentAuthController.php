@@ -58,9 +58,11 @@ class StudentAuthController extends Controller
 
     // FORGET PASSWORD
 
-    public function forgotPassword(){
+    public function forgotPassword()
+    {
         return view('auth.student.forgot-password');
     }
+
 
     public function forgotPasswordStore(Request $request)
     {
@@ -68,15 +70,28 @@ class StudentAuthController extends Controller
             'email' => 'required|email|exists:students',
         ]);
 
+        $student = Student::where('email', $request->email)->first();
+
+        if (!$student) {
+            return back()->withErrors(['email' => 'Invalid email address.'])->withInput();
+        }
+
         $token = Str::random(64);
 
-        DB::table('password_reset_tokens')->insert([
-            'email' => $request->email,
-            'token' => $token,
-            'created_at' => Carbon::now()
-          ]);
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $request->email],
+            [
+                'email' => $request->email,
+                'token' => $token,
+                'created_at' => Carbon::now()
+            ]
+        );
 
-        Mail::send('auth.student.verify-email', ['token' => $token], function($message) use($request){
+        Mail::send('auth.student.verify-email', [
+            'token' => $token,
+            'email' => $student->email,
+            'name' => $student->name,
+        ], function ($message) use ($request) {
             $message->to($request->email);
             $message->subject('Reset Password');
         });
@@ -85,10 +100,12 @@ class StudentAuthController extends Controller
     }
 
 
-    public function resetPassword($token) {
+    public function resetPassword($token)
+    {
 
         return view('auth.student.reset-password', ['token' => $token]);
-     }
+    }
+
 
     public function resetPasswordStore(Request $request)
     {
@@ -99,21 +116,25 @@ class StudentAuthController extends Controller
         ]);
 
         $updatePassword = DB::table('password_reset_tokens')
-                            ->where([
-                              'email' => $request->email,
-                              'token' => $request->token
-                            ])
-                            ->first();
+            ->where([
+                'email' => $request->email,
+                'token' => $request->token,
+            ])
+            ->where('created_at', '>', Carbon::now()->subHours(24))
+            ->first();
 
-        if(!$updatePassword){
-            return back()->withInput()->with('status', 'Invalid token!');
+        if (!$updatePassword) {
+            return back()->with('status', 'Invalid or expired token!');
         }
 
         $user = Student::where('email', $request->email)
-                    ->update(['password' => $request->password]);
+            ->update(['password' => $request->password]);
 
-        DB::table('password_reset_tokens')->where(['email'=> $request->email])->delete();
+        DB::table('password_reset_tokens')->where(['email' => $request->email])->delete();
 
         return redirect()->route('student.login')->with('status', 'Your password has been changed!');
     }
+
+
+
 }

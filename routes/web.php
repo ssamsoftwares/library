@@ -98,6 +98,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/download-sampleCsv-student', [StudentController::class, 'downloadSampleCsv'])->name('student.downloadSampleCsv');
 
+    Route::get('/uploaded-student-edit/{bulkUploadStudent?}', [StudentController::class, 'bulkUploadStudentsEdit'])->name('student.bulkUploadStudentsEdit');
+
+    Route::post('/uploaded-student-edit/{bulkUploadStudent?}', [StudentController::class, 'bulkUploadStudentsUpdate'])->name('student.bulkUploadStudentsUpdate');
+
     // asign plan
 
     Route::get('/plans', [PlanController::class, 'index'])->name('plans');
