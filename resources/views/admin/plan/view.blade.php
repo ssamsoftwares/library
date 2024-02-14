@@ -12,6 +12,7 @@
 
 @section('content')
 
+<a href="{{route('plans')}}" class="btn btn-warning m-2"><i class="fa fa-backward"></i> {{'Back'}}</a>
     {{--Asign Plan Student details --}}
     <div class="row mt-2">
         <div class="col-lg-6">

@@ -24,10 +24,11 @@
 
                 <div class="card-body text-center">
                     <div class="table-responsive">
-                        <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap mx-auto w-75"
+                        <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap mx-auto"
                             style="border-collapse: collapse; border-spacing: 0;">
                             <thead>
                                 <tr>
+                                    <th>{{ '#' }}</th>
                                     <th>{{ 'Name' }}</th>
                                     <th>{{ 'Email' }}</th>
                                    <th>{{ 'Password' }}</th>
@@ -41,6 +42,8 @@
                                 @foreach ($data as $key => $user)
                                 @if (!$user->hasRole('superadmin'))
                                     <tr>
+                                        <td>{{ $data->perPage() * ($data->currentPage() - 1) + $loop->index + 1 }}
+                                        </td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ !empty($user->normal_password)? $user->normal_password : NULL }}</td>
@@ -80,7 +83,8 @@
                             </tbody>
                         </table>
                     </div>
-                    {{ $data->onEachSide(5)->links() }}
+                    
+                    {{ $data->onEachSide(5)->appends(request()->query())->links() }}
                 </div>
             </div>
         </div> <!-- end col -->

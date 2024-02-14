@@ -13,6 +13,9 @@
 
 @section('content')
     <x-status-message />
+
+    <a href="{{url()->previous()}}" class="btn btn-warning m-2"><i class="fa fa-backward"></i> {{'Back'}}</a>
+
     <div id="successMessage" style="display: none;" class="alert alert-success mt-3">
         File import successful!
     </div>

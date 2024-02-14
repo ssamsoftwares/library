@@ -11,6 +11,8 @@
 @section('content')
     <x-status-message />
 
+    <a href="{{route('student.bulkUploadStudents')}}" class="btn btn-warning m-2"><i class="fa fa-backward"></i> {{'Back'}}</a>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card">

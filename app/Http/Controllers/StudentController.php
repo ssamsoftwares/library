@@ -30,21 +30,39 @@ class StudentController extends Controller
     }
 
     // Show list Student
+
+
     public function index(Request $request)
     {
-        $authuser = Auth::user();
-        $students = Student::with('createby');
 
-        if ($request->has('search')) {
-            $search = $request->input('search');
+        $search = $request->search;
+        $authuser = Auth::user();
+        $students = Student::query()->with('createby','plan');
+
+        // Check if the user is a superadmin
+        if ($authuser->hasRole('superadmin')) {
+            // Superadmin can see all students, so no need to filter
+        } else {
+            // For admin and manager, see students by the current user's id
+            $students->where('user_id', $authuser->id);
+        }
+
+        if (!empty($request->search)) {
+
             $students->where(function ($subquery) use ($search) {
                 $subquery->where('name', 'like', '%' . $search . '%')
                     ->orWhere('email', 'like', $search . '%')
                     ->orWhere('personal_number', 'like', $search . '%')
-                    ->orWhere('dob', 'like', $search . '%')
-                    ->orWhereHas('createby', function ($query) use ($search) {
-                        $query->where('users.name', 'like', '%' . $search . '%');
+                    ->orWhere('dob', 'like', $search . '%');
+                    $subquery->orWhereHas('plan', function ($query) use ($search) {
+                        $query->where('library_branch', 'like', '%' . $search . '%');
                     });
+
+                if (Auth::user()->hasRole('superadmin')) {
+                    $subquery->orWhereHas('createby', function ($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    });
+                }
             });
         }
 
@@ -52,6 +70,7 @@ class StudentController extends Controller
 
         return view('admin.student.all')->with(compact('students'));
     }
+
 
 
     // Add Student From
@@ -188,7 +207,6 @@ class StudentController extends Controller
                 $data = Arr::except($data, array('password'));
             }
 
-
             $student->update($data);
         } catch (Exception $e) {
             DB::rollBack();
@@ -232,10 +250,17 @@ class StudentController extends Controller
 
     public function bulkUploadStudents(Request $request)
     {
+        $search = $request->search;
+        $authuser = Auth::user();
         $bulkUploadStudents = BulkUploadStudent::with('createbyStudent');
 
+         // If user is not a superadmin, filter BulkUploadStudent by created_by
+         if (!$authuser->hasRole('superadmin')) {
+            $bulkUploadStudents->where('created_by', $authuser->id);
+        }
+
         if (!empty($request->search)) {
-            $search = $request->search;
+
             $bulkUploadStudents->where(function ($subquery) use ($search) {
                 $subquery->where('name', 'like', '%' . $search . '%')
                     ->orWhere('email', 'like', '%' . $search . '%')

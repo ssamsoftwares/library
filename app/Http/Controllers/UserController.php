@@ -123,7 +123,6 @@ class UserController extends Controller
             // 'roles' => 'required'
         ]);
 
-        // dd($request->all());
 
         DB::beginTransaction();
 
@@ -140,8 +139,11 @@ class UserController extends Controller
             $user = User::find($id);
             $user->update($input);
 
+            $user->roles()->detach();
+
             // Assign the "manager" role
             // $user->assignRole('manager');
+
             $user->assignRole($request->roles);
         } catch (Exception $e) {
             DB::rollback();

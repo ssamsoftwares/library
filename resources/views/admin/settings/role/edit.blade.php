@@ -11,7 +11,7 @@
 @section('content')
 
 <x-status-message/>
-
+<a href="{{route('roles.index')}}" class="btn btn-warning"><i class="fa fa-backward"></i> {{'Back'}}</a>
 <div class="row">
     <div class="col-lg-12">
         <div class="card">

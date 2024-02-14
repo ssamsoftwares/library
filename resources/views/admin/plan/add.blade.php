@@ -11,6 +11,8 @@
 @section('content')
     <x-status-message />
 
+    <a href="{{route('plans')}}" class="btn btn-warning m-2"><i class="fa fa-backward"></i> {{'Back'}}</a>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
@@ -23,12 +25,15 @@
                             {{-- @csrf --}}
                             <div class="col-lg-8">
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" name="student_search"
+                                    <input type="search" class="form-control" name="student_search"
                                         placeholder="Search Student ...... Email, Phone & Aadhar Number"
                                         value="{{ isset($_REQUEST['student_search']) ? $_REQUEST['student_search'] : (old('student_search') ? old('student_search') : '') }}">
+
                                     <div class="input-group-append">
                                         <button class="btn btn-success" type="submit">Search</button>
+                                        <a href="{{ route('plan.add') }}" class="btn btn-secondary">{{'Reset'}}</a>
                                     </div>
+
                                     @error('student_search')
                                         <div class="text-danger form-text">{{ $message }}</div>
                                     @enderror

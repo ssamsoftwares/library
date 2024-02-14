@@ -69,6 +69,7 @@
                         style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
+                                <th>{{ '#' }}</th>
                                 <th>{{ 'Name' }}</th>
                                 <th>{{ 'Email' }}</th>
                                 <th>{{ 'Phone' }}</th>
@@ -81,6 +82,8 @@
                         <tbody>
                             @foreach ($bulkUploadStudents as $stu)
                                 <tr>
+                                    <td>{{ $bulkUploadStudents->perPage() * ($bulkUploadStudents->currentPage() - 1) + $loop->index + 1 }}
+                                    </td>
                                     <td>{{ $stu->name }}</td>
                                     <td>{{ $stu->email }}</td>
                                     <td>{{ $stu->phone_number }}</td>
@@ -107,7 +110,8 @@
                             @endforeach
                         </tbody>
                     </table>
-                    {{ $bulkUploadStudents->appends(request()->query())->links() }}
+                  
+                    {{ $bulkUploadStudents->onEachSide(5)->appends(request()->query())->links() }}
                 </div>
             </div>
         </div> <!-- end col -->

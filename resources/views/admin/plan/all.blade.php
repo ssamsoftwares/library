@@ -14,6 +14,8 @@
 
     <x-status-message />
 
+    <a href="{{route('plans')}}" class="btn btn-warning m-2"><i class="fa fa-backward"></i> {{'Back'}}</a>
+
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -32,9 +34,11 @@
                         style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
+                                <th>{{'#'}}</th>
                                 <th>{{ 'Plan' }}</th>
                                 <th>{{ 'Student Name' }}</th>
                                 <th>{{ 'Student Email' }}</th>
+                                <th>{{ 'Library Branch' }}</th>
                                 <th>{{ 'Valid From Date ' }}</th>
                                 <th>{{ 'Valid Upto Date' }}</th>
                                     <th>{{ 'Actions' }}</th>
@@ -44,9 +48,12 @@
                         <tbody>
                             @foreach ($plans as $p)
                                 <tr>
+                                    <td>{{ $plans->perPage() * ($plans->currentPage() - 1) + $loop->index + 1 }}
+                                    </td>
                                     <td>{{ Str::ucfirst($p->plan) }}</td>
                                     <td>{{ $p->student->name }}</td>
                                     <td>{{ $p->student->email }}</td>
+                                    <td>{{ isset($p->library_branch) ? Str::ucfirst($p->library_branch) : '' }}</td>
                                     <td>{{ \Carbon\Carbon::parse($p->valid_from_date)->format('d-m-Y') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($p->valid_upto_date)->format('d-m-Y') }}</td>
                                     <td>
@@ -82,7 +89,8 @@
                             @endforeach
                         </tbody>
                     </table>
-                    {{ $plans->onEachSide(5)->links() }}
+                    {{ $plans->onEachSide(5)->appends(request()->query())->links() }}
+
                 </div>
             </div>
         </div> <!-- end col -->

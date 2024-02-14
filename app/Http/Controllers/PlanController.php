@@ -11,6 +11,7 @@ use PDF;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Response;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class PlanController extends Controller
 {
@@ -23,21 +24,32 @@ class PlanController extends Controller
         $this->middleware('permission:plan-delete', ['only' => ['destroy']]);
     }
 
+
     public function index(Request $request)
     {
-        $plans = Plan::with('student');
-        $search = $request->input('search');
+        $search = $request->search;
+        $authuser = Auth::user();
 
-        if ($search && Carbon::hasFormat($search, 'd-m-Y')) {
+        $plans = Plan::query()->with('student');
+
+        if (!$authuser->hasRole('superadmin')) {
+            // If user is not a superadmin, filter plans by user_id
+            $plans->whereHas('student', function ($query) use ($authuser) {
+                $query->where('user_id', $authuser->id);
+            });
+        }
+
+        if (!empty($search) && Carbon::hasFormat($search, 'd-m-Y')) {
             $formattedSearchDate = Carbon::createFromFormat('d-m-Y', $search)->format('Y-m-d');
             $plans->where(function ($query) use ($formattedSearchDate) {
                 $query->orWhere('valid_from_date', 'like', '%' . $formattedSearchDate . '%')
                     ->orWhere('valid_upto_date', 'like', '%' . $formattedSearchDate . '%');
             });
-        } elseif ($search) {
+        } elseif (!empty($search)) {
             $plans->where(function ($query) use ($search) {
                 $query->where('plan', 'like', '%' . $search . '%')
                     ->orWhere('mode_of_payment', 'like', '%' . $search . '%')
+                    ->orWhere('library_branch', 'like', '%' . $search . '%')
                     ->orWhereHas('student', function ($studentSubquery) use ($search) {
                         $studentSubquery->where('name', 'like', '%' . $search . '%')
                             ->orWhere('email', 'like', '%' . $search . '%')
@@ -52,28 +64,40 @@ class PlanController extends Controller
         return view('admin.plan.all', compact('plans'));
     }
 
+
     //Asign Plan From
+
     public function create(Request $request)
     {
+        $authuser = Auth::user();
         $student = null;
         $assignButton = "disabled";
         $pdfDownloadBtn = "disabled";
 
         if (!empty($request->input('student_search'))) {
-            $student = Student::where('personal_number', $request->input('student_search'))->orWhere('aadhar_number', $request->input('student_search'))->orWhere('email', $request->input('student_search'))->first();
-            if ($student == NULL) {
+            $query = Student::where('personal_number', $request->input('student_search'))
+                ->orWhere('aadhar_number', $request->input('student_search'))
+                ->orWhere('email', $request->input('student_search'));
+
+            if (!$authuser->hasRole('superadmin')) {
+                $query->where('user_id', $authuser->id);
+            }
+
+            $student = $query->first();
+
+            if ($student == null) {
                 return redirect()->back()->with("status", "Student Details not found.")->withInput();
-            } else {
-                $assignButton = "";
-                return view('admin.plan.add', compact('student', 'assignButton', 'pdfDownloadBtn'));
             }
-        } else {
-            if ($request->has('student_search') && empty($request->input('student_search'))) {
-                return redirect()->back()->with("status", "Please input search query.")->withInput();
-            }
-            return view('admin.plan.add', compact('student', 'assignButton', 'pdfDownloadBtn'));
+
+            $assignButton = "";
+        } elseif ($request->has('student_search') && empty($request->input('student_search'))) {
+            return redirect()->back()->with("status", "Please input search query.")->withInput();
         }
+
+        return view('admin.plan.add', compact('student', 'assignButton', 'pdfDownloadBtn'));
     }
+
+
 
 
     public function view($plan)

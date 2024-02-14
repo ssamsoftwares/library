@@ -29,6 +29,7 @@
                 <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                     <thead>
                         <tr>
+                            <th>{{'#'}}</th>
                             <th>{{ 'Plan' }}</th>
                             <th>{{ 'Student Name' }}</th>
                             <th>{{ 'Student Email' }}</th>
@@ -36,12 +37,15 @@
                             <th>{{ 'Valid Upto Date' }}</th>
                             <th>{{ 'Actions' }}</th>
                             <th>{{ 'Mode of Payment' }}</th>
+                            <th>{{ 'Library Branch' }}</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @foreach ($plans as $p)
                         <tr>
+                            <td>{{ $plans->perPage() * ($plans->currentPage() - 1) + $loop->index + 1 }}
+                            </td>
                             <td>{{ $p->plan }}</td>
                             <td>{{ $p->student->name }}</td>
                             <td>{{ $p->student->email }}</td>
@@ -59,11 +63,14 @@
                             </td>
 
                             <td>{{ $p->mode_of_payment }}</td>
+                            <td>{{ isset($p->library_branch) ? Str::ucfirst($p->library_branch) : 'No Library Branch' }}
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
-                {{ $plans->onEachSide(5)->links() }}
+                {{ $plans->onEachSide(5)->appends(request()->query())->links() }}
+
             </div>
         </div>
     </div> <!-- end col -->

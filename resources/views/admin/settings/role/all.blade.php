@@ -14,6 +14,8 @@
 
     <x-status-message />
 
+    <a href="{{route('roles.index')}}" class="btn btn-warning"><i class="fa fa-backward"></i> {{'Back'}}</a>
+
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -35,6 +37,7 @@
                             style="border-collapse: collapse; border-spacing: 0;">
                             <thead>
                                 <tr>
+                                    <th>{{ '#' }}</th>
                                     <th>{{ 'Role' }}</th>
                                     <th>{{ 'Actions' }}</th>
 
@@ -44,6 +47,8 @@
                             <tbody id="candidatesData">
                                 @foreach ($roles as $key => $role)
                                     <tr>
+                                        <td>{{ $roles->perPage() * ($roles->currentPage() - 1) + $loop->index + 1 }}
+                                        </td>
                                         <td>{{ $role->name }}</td>
 
                                         </td>
@@ -74,7 +79,8 @@
                             </tbody>
                         </table>
                     </div>
-                    {{ $roles->onEachSide(5)->links() }}
+                   
+                    {{ $roles->onEachSide(5)->appends(request()->query())->links() }}
                 </div>
             </div>
         </div> <!-- end col -->

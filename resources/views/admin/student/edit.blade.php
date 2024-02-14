@@ -11,6 +11,8 @@
 @section('content')
     <x-status-message />
 
+    <a href="{{ route('students') }}" class="btn btn-warning m-2"><i class="fa fa-backward"></i> {{ 'Back' }}</a>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
@@ -64,7 +66,7 @@
                             </div>
                         </div>
 
-{{--
+                        {{--
                         <div class="row">
                             <div class="col-lg-6">
                                 <x-form.input name="payment" label="Payment" type="text" :value="$student->payment" />
@@ -131,8 +133,8 @@
                                     <img src="{{ asset($student->aadhar_front_img) }}" id="preview_aadhar_front_img"
                                         alt="" width="50" height="50">
                                 @else
-                                    <img src="" id="preview_aadhar_front_img" alt=""
-                                        width="50" height="50">
+                                    <img src="" id="preview_aadhar_front_img" alt="" width="50"
+                                        height="50">
                                 @endif
                             </div>
                         </div>
@@ -148,8 +150,8 @@
                                     <img src="{{ asset($student->aadhar_back_img) }}" id="preview_aadhar_back_img"
                                         alt="" width="50" height="50">
                                 @else
-                                    <img src="" id="preview_aadhar_back_img" alt=""
-                                        width="50" height="50">
+                                    <img src="" id="preview_aadhar_back_img" alt="" width="50"
+                                        height="50">
                                 @endif
                             </div>
                         </div>
@@ -171,11 +173,11 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-lg-6">
                                 <x-form.radio label="Status" name="status" id="" :value="$student->status" />
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div>
                             <button class="btn btn-primary mt-2" type="submit">{{ __('Update Student') }}</button>
@@ -185,8 +187,6 @@
             </div>
         </div>
     </div>
-
-
 @endsection
 
 @push('script')

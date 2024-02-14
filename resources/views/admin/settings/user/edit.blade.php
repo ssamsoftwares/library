@@ -12,6 +12,7 @@
 
 <x-status-message/>
 
+<a href="{{route('users.index')}}" class="btn btn-warning"><i class="fa fa-backward"></i> {{'Back'}}</a>
 <div class="row">
     <div class="col-lg-12">
         <div class="card">

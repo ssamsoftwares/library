@@ -109,7 +109,7 @@
 
         .photo-container {
             position: absolute;
-            top:5px;
+            top: 5px;
         }
 
         .student-photo {
@@ -141,8 +141,7 @@
                 <div class="logo-container">
                     {{-- <img src="https://i0.wp.com/www.k3library.com/wp-content/uploads/2023/03/k3library-for-self-study-indore-logo.webp?w=500&ssl=1"
                         alt="Logo" class="logo"> --}}
-                        <img src="https://manage.k3library.com/assets/images/logo2.jpeg"
-                alt="Logo" class="logo">
+                    <img src="https://manage.k3library.com/assets/images/logo2.jpeg" alt="Logo" class="logo">
                 </div>
 
             </div>
@@ -193,6 +192,13 @@
             <span>Amount Paid:
                 -------------------------------------------------------------------------------------------------------</span>
         </div> --}}
+
+        <div class="info-row">
+            <span>Library Branch:
+                <b class="bold-text"> {{ !empty($plan->library_branch) ? $plan->library_branch : '----------------------------------------------------------------------------' }}</b></span>&nbsp;&nbsp;&nbsp;</span>
+        </div>
+
+
         <div class="info-row">
             <span>Mode: <b class="bold-text">
                     {{ !empty($plan->mode_of_payment) ? $plan->mode_of_payment : '----------------------------------------------------------------------------' }}</b></span>&nbsp;&nbsp;&nbsp;

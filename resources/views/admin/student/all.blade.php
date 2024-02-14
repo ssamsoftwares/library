@@ -54,16 +54,17 @@
             <div class="card">
                 <div class="row m-2 mt-4 justify-content-end d-flex">
                     <div class="col-lg-4 mt-4">
-                      <a href="{{route('student.bulkUploadStudents')}}" class="btn btn-info btn-sm"> Bulk Upload Students View</a>
-                      <a href="{{route('students')}}" class="btn btn-success btn-sm">Students View</a>
+                        <a href="{{ route('student.bulkUploadStudents') }}" class="btn btn-info btn-sm"> Bulk Upload Students
+                            View</a>
+                        <a href="{{ route('students') }}" class="btn btn-success btn-sm">Students View</a>
                     </div>
 
-                    <div class="col-lg-4 mt-4">
+                    <div class="col-lg-3 mt-4">
                     </div>
 
-                    <div class="col-lg-4">
+                    <div class="col-lg-5">
                         <x-search.table-search action="{{ route('students') }}" method="get" name="search"
-                        value="{{ isset($_REQUEST['search']) ? $_REQUEST['search'] : '' }}" btnClass="search_btn" />
+                            value="{{ isset($_REQUEST['search']) ? $_REQUEST['search'] : '' }}" btnClass="search_btn" />
                     </div>
                 </div>
 
@@ -72,15 +73,17 @@
                         style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
+                                <th>{{ '#' }}</th>
                                 <th>{{ 'Student Photo' }}</th>
                                 <th>{{ 'Name' }}</th>
+                                <th>{{ 'Phone' }}</th>
                                 <th>{{ 'Email' }}</th>
                                 @hasrole('superadmin')
                                     <th>{{ 'Password' }}</th>
+                                    <th>{{ 'Created By' }}</th>
                                 @endhasrole
-                                <th>{{ 'Phone' }}</th>
-                                <th>{{ 'Created By' }}</th>
-                                <th>{{ 'Status' }}</th>
+                                <th>{{ 'Library Branch' }}</th>
+                                {{-- <th>{{ 'Status' }}</th> --}}
                                 <th>{{ 'Actions' }}</th>
                             </tr>
                         </thead>
@@ -88,6 +91,8 @@
                         <tbody>
                             @foreach ($students as $stu)
                                 <tr>
+                                    <td>{{ $students->perPage() * ($students->currentPage() - 1) + $loop->index + 1 }}
+                                    </td>
                                     <td>
                                         @if (!empty($stu->image))
                                             <img src="{{ asset($stu->image) }}" alt="studentImg" width="85">
@@ -97,31 +102,33 @@
                                         @endif
                                     </td>
                                     <td>{{ $stu->name }}</td>
+                                    <td>{{ $stu->personal_number }}</td>
                                     <td>{{ $stu->email }}</td>
                                     @hasrole('superadmin')
                                         <td>{{ $stu->password }}</td>
+                                        <td>{{ optional($stu->createby)->name }}</td>
                                     @endhasrole
-                                    <td>{{ $stu->personal_number }}</td>
-                                    <td>{{ optional($stu->createby)->name }}</td>
 
-                                    <td>
+                                    <td>{{ isset($stu->plan->library_branch) ? Str::ucfirst($stu->plan->library_branch) : 'No Library Branch' }}
+                                    </td>
+
+
+                                    {{-- <td>
                                         @php
                                             $statusAction = $stu->status == 'active' ? 'block' : 'active';
-                                            $roleBasedUrl = auth()
-                                                ->user()
-                                                ->hasRole('superadmin')
-                                                ? route('student.statusUpdate', ['id' => $stu->id, 'action' => $statusAction])
-                                                : '#';
+                                            $roleBasedUrl = auth()->user()->hasRole('superadmin') ? route('student.statusUpdate', ['id' => $stu->id, 'action' => $statusAction]) : '#';
                                         @endphp
 
                                         <a href="{{ $roleBasedUrl }}"
-                                            onclick="{{ auth()->user()->hasRole('superadmin')? "return confirm('Are You Sure " . ($stu->status == 'active' ? 'Block' : 'Active') . " This student.')": '' }}">
+                                            onclick="{{ auth()->user()->hasRole('superadmin') ? "return confirm('Are You Sure " . ($stu->status == 'active' ? 'Block' : 'Active') . " This student.')" : '' }}">
                                             <span
                                                 class="btn btn-{{ $stu->status == 'active' ? 'success' : 'danger' }} btn-sm">
                                                 {{ $stu->status == 'active' ? 'Active' : 'Block' }}
                                             </span>
                                         </a>
-                                    </td>
+                                    </td> --}}
+
+
 
                                     <td>
                                         <div class="action-btns text-center" role="group">
@@ -147,7 +154,9 @@
                             @endforeach
                         </tbody>
                     </table>
-                    {{ $students->onEachSide(5)->links() }}
+                    {{-- {{ $students->onEachSide(5)->links() }} --}}
+                    {{ $students->onEachSide(5)->appends(request()->query())->links() }}
+
                 </div>
             </div>
         </div> <!-- end col -->

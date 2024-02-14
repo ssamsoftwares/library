@@ -11,7 +11,7 @@
 @endpush
 
 @section('content')
-
+<a href="{{route('roles.index')}}" class="btn btn-warning"><i class="fa fa-backward"></i> {{'Back'}}</a>
     {{-- Role details --}}
     <div class="row">
         <div class="col-lg-6">
