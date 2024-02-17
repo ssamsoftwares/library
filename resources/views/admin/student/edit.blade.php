@@ -84,7 +84,16 @@
                                 <x-form.input name="subscription" label="Subscription" :value="$student->subscription" />
                             </div> --}}
 
-                            <div class="col-lg-12">
+                            <div class="col-lg-6">
+                                <x-form.select name="library_branch" label="Library Branch" chooseFileComment="--Select Branch--"
+                                    :options="[
+                                        'Vijaynagar' => 'Vijay Nagar',
+                                        'Marimata' => 'Marimata',
+                                        ]"  :selected="$student->library_branch" />
+
+                            </div>
+
+                            <div class="col-lg-6">
                                 <x-form.input name="remark_singnature" label="Remark Singnature" :value="$student->remark_singnature" />
                             </div>
                         </div>

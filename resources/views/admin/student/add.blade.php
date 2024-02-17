@@ -81,8 +81,16 @@
                         {{-- <div class="col-lg-6">
                             <x-form.input name="subscription" label="Subscription"/>
                         </div> --}}
+                        <div class="col-lg-6">
+                            <x-form.select name="library_branch" label="Library Branch" chooseFileComment="--Select Branch--"
+                                :options="[
+                                    'Vijaynagar' => 'Vijay Nagar',
+                                    'Marimata' => 'Marimata',
+                                ]" />
 
-                        <div class="col-lg-12">
+                        </div>
+
+                        <div class="col-lg-6">
                             <x-form.input name="remark_singnature" label="Remark Singnature"/>
                         </div>
                     </div>

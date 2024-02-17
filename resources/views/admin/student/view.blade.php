@@ -64,6 +64,12 @@
                     </h5>
                     <hr />
 
+                    <h5 class="card-title">
+                        <span>Library branch : </span>
+                        <span> {{ isset($student->library_branch) ? Str::ucfirst($student->library_branch) : 'Not Found Library branch'}}</span>
+                    </h5>
+                    <hr />
+
                     {{-- <h5 class="card-title">
                         <span>Subscription : </span>
                         <span>{{ $student->subscription }}</span>

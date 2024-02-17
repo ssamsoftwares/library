@@ -55,6 +55,8 @@
                             <hr>
                         @endif
                     </div>
+
+
                     <form method="post" action="{{ route('plan.store') }}" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="student_id" value="{{ !empty($student) ? $student->id : '' }}">
@@ -63,17 +65,20 @@
 
 
                         <div class="row">
-                            <div class="col-lg-12">
-                                <x-form.select name="library_branch" label="Library Branch" chooseFileComment="--Select Branch--"
-                                    :options="[
-                                        'Vijaynagar' => 'Vijay Nagar',
-                                        'Marimata' => 'Marimata',
-                                    ]" />
+                                <div class="col-lg-12">
+                                    <label for="">{{'Library Branch'}}</label>
+                                    <select name="library_branch" id="library_branch" class="form-control">
+                                        <option value="">--Select Branch--</option>
+
+                                        <option value="Vijaynagar" {{ !empty($student) && $student->library_branch == 'Vijaynagar' ? 'selected' : '' }}>Vijay Nagar</option>
+
+                                        <option value="Marimata" {{ !empty($student) && $student->library_branch == 'Marimata' ? 'selected' : '' }}>Marimata</option>
+                                    </select>
 
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row mt-2">
                             <div class="col-lg-6">
                                 <x-form.select name="plan" label="Plan" chooseFileComment="--Select Plan--"
                                     :options="[

@@ -109,7 +109,14 @@
                                         <td>{{ optional($stu->createby)->name }}</td>
                                     @endhasrole
 
-                                    <td>{{ isset($stu->plan->library_branch) ? Str::ucfirst($stu->plan->library_branch) : 'No Library Branch' }}
+                                    <td>
+                                        @if (!empty($stu->library_branch))
+                                            {{ Str::ucfirst($stu->library_branch) }}
+                                        @elseif (!empty($stu->plan) && !empty($stu->plan->library_branch))
+                                            {{ Str::ucfirst($stu->plan->library_branch) }}
+                                        @else
+                                           {{' No Library Branch'}}
+                                        @endif
                                     </td>
 
 
